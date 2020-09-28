@@ -1,0 +1,19 @@
+.TeamCard {
+    width: 200px;
+    text-align: center;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    border-radius: 15px;
+  }
+  
+  .TeamDescription {
+    background-color: black;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .TeamImage {
+    border-radius: 15px 15px 0 0;
+  }
+  

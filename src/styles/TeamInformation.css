@@ -1,0 +1,79 @@
+.MainDivMyTeam {
+    float: left;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 0;
+  }
+  
+  .teamImageCardContainer {
+    float: left;
+    width: 20%;
+    margin-right: 5%;
+    background: rgb(24, 20, 20);
+    text-align: center;
+    padding: 0;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 5px 10px 15px 5px black;
+    border: 1px solid white;
+  }
+  
+  .TeamImage {
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .TeamPlayerSelection {
+    float: left;
+    width: 74%;
+    height: 800px;
+    box-shadow: 5px 10px 15px 5px black;
+    background: rgb(59, 26, 26);
+    border: 1px solid white;
+    margin: 0;
+  }
+  
+  .teamSelectionNav {
+    width: 100%;
+    background-color: rgb(10, 53, 66);
+    height: 60px;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .teamDivs {
+    display: flex;
+    overflow: hidden;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .teamCardDiv {
+    border-radius: 15px;
+    margin: 2%;
+    padding: 0;
+    border: 1px solid white;
+  }
+  
+  .SaveButton {
+    float: right;
+    margin-right: 1%;
+    border: 1px solid rgb(53, 83, 83);
+    border-radius: 15px;
+    width: 10%;
+    height: 40px;
+    padding: 0;
+    margin-top: 1%;
+    box-shadow: 2px 2px 10px 2px black;
+  }
+  
+  .SaveButton:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .SaveButton:hover {
+    outline: none;
+    box-shadow: none;
+  }
+  
