@@ -11,7 +11,6 @@ import {
   Image,
   Button,
   useDisclosure,
-  Input,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -21,7 +20,6 @@ import {
   DrawerHeader,
 } from "@chakra-ui/core";
 import userContext from "../services/userContext";
-import Chat from "./Chat";
 import FriendsList from "./FriendsList";
 
 export default function NavBar() {
@@ -84,9 +82,10 @@ export default function NavBar() {
               <DrawerOverlay />
               <DrawerContent>
                 <DrawerCloseButton
-                  background="red"
+                  background="#8b0000"
+                  color="white"
                   mt="5px"
-                  _hover={{ background: "red", color: "white" }}
+                  _hover={{ background: "#9c0000" }}
                 />
                 <DrawerHeader style={{ color: "white", background: "#16697a" }}>
                   My Friends
