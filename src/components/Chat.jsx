@@ -20,8 +20,6 @@ export default function Chat(props) {
     });
   }, []);
 
-  console.log(props.class);
-
   const sendMessage = (e) => {
     e.preventDefault();
 

@@ -69,7 +69,28 @@ export default function NavBar() {
               My Tournaments
             </Link>
           </li>
+
           <li className="NavBar-li">
+            <Link onClick={logout} className="h2tagNav">
+              Log Out
+            </Link>
+          </li>
+
+          <li className="NavBar-li">
+            <Link className="h2tagNav" onClick={profile}>
+              My Profile
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  ) : (
+    <Redirect to="/" />
+  );
+}
+
+/*
+<li className="NavBar-li">
             <div ref={btnRef} onClick={onOpen} style={{ marginTop: "20px" }}>
               <div className="menuIcon"></div>
               <div className="menuIcon"></div>
@@ -217,21 +238,4 @@ export default function NavBar() {
               </DrawerContent>
             </Drawer>
           </li>
-          <li className="NavBar-li">
-            <Link onClick={logout} className="h2tagNav">
-              Log Out
-            </Link>
-          </li>
-
-          <li className="NavBar-li">
-            <Link className="h2tagNav" onClick={profile}>
-              My Profile
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  ) : (
-    <Redirect to="/" />
-  );
-}
+*/
