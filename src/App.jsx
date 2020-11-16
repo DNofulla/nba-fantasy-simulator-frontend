@@ -19,6 +19,7 @@ export default function App() {
   });
 
   useEffect(() => {
+    
     const validateJWT = async () => {
       let jwtToken = localStorage.getItem("auth-token");
       if (jwtToken === null) {

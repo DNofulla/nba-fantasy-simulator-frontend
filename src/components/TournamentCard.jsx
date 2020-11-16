@@ -65,23 +65,165 @@ export default function TournamentCard({ type, tourid, condition }) {
     userData.user.username
   );
 
+  const [publicNew, setPublicNew] = useState(true);
+
   useEffect(() => {
-    Axios.get("/tournaments/getTournamentDataById", {
-      params: {
-        tournamentId: tourid,
-      },
-    })
-      .then((res) => {
-        console.log(res);
-        setTournamentData(res.data);
+    if (tourid !== "none" && tourid !== null) {
+      Axios.get("/tournaments/getTournamentDataById", {
+        params: {
+          tournamentId: tourid,
+        },
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
       })
-      .then((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          console.log(res);
+          setTournamentData(res.data);
+        })
+        .then((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   const createTournament = async (e) => {
-    e.preventDefault();
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < 14; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+
+    const options = {
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+    };
+
+    try {
+      const res = await Axios.post(
+        "http://localhost:8080/tournaments",
+        {
+          id: result,
+          hostUserId: userData.user.id,
+          hostUsername: userData.user.username,
+          lockedInStatus: newTourLockedIn,
+          publicStatus: publicNew,
+          tournamentName: newTourName,
+          registeredTeamId: [],
+          participantLimit: 16,
+        },
+        options
+      );
+
+      console.log(userData.user);
+      if (type === "tour1") {
+        if (res.status === 200) {
+          console.log(userData.user.username);
+
+          Axios.post(
+            "http://localhost:8080/userInfo/update/" + userData.user.id,
+            {
+              id: userData.user.id,
+              username: userData.user.username,
+              password: userData.user.password,
+              email: userData.user.email,
+              firstName: userData.user.firstName,
+              lastName: userData.user.lastName,
+              friendIDs: userData.user.friendIDs,
+              announcementIDs: userData.user.announcementIDs,
+              accountPoints: userData.user.accountPoints,
+              team1Id: userData.user.team1Id,
+              team2Id: userData.user.team2Id,
+              tournament1Id: result,
+              tournament2Id: userData.user.tournament2Id,
+              matchIDs: userData.user.matchIDs,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + userData.token,
+              },
+            }
+          )
+            .then((res) => {
+              console.log(res.data.username);
+            })
+            .then((err) => {
+              console.log(err);
+            });
+        }
+        setTimeout(() => {
+          setTimeout(() => {
+            history.push("/Home");
+            setTimeout(() => {
+              history.push("/MyTournaments");
+              setTimeout(() => {
+                history.push("/Home");
+                setTimeout(() => {
+                  history.push("/MyTournaments/");
+                }, 50);
+              }, 50);
+            });
+          });
+        }, 50);
+      } else {
+        if (res.status === 200) {
+          console.log(userData.user.username);
+
+          Axios.post(
+            "http://localhost:8080/userInfo/update/" + userData.user.id,
+            {
+              id: userData.user.id,
+              username: userData.user.username,
+              password: userData.user.password,
+              email: userData.user.email,
+              firstName: userData.user.firstName,
+              lastName: userData.user.lastName,
+              friendIDs: userData.user.friendIDs,
+              announcementIDs: userData.user.announcementIDs,
+              accountPoints: userData.user.accountPoints,
+              team1Id: userData.user.team1Id,
+              team2Id: userData.user.team2Id,
+              tournament1Id: userData.user.tournament1Id,
+              tournament2Id: result,
+              matchIDs: userData.user.matchIDs,
+            },
+            {
+              headers: {
+                Authorization: "Bearer " + userData.token,
+              },
+            }
+          )
+            .then((res) => {
+              console.log(res.data);
+            })
+            .then((err) => {
+              console.log(err);
+            });
+        }
+        setTimeout(() => {
+          setTimeout(() => {
+            history.push("/Home");
+            setTimeout(() => {
+              history.push("/MyTournaments");
+              setTimeout(() => {
+                history.push("/Home");
+                setTimeout(() => {
+                  history.push("/MyTournaments/");
+                }, 50);
+              }, 50);
+            });
+          });
+        }, 50);
+      }
+      setNewTourName("");
+      setTournamentData(res.data);
+      console.log(userData.user);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   if (condition === "MY_TOURS") {
@@ -156,10 +298,20 @@ export default function TournamentCard({ type, tourid, condition }) {
                     onChange={setNewTourPublicStatus}
                     value={newTourPublicStatus}>
                     <Stack direction="row">
-                      <Radio name="radioChoice" value={true}>
+                      <Radio
+                        onClick={() => {
+                          setPublicNew(true);
+                        }}
+                        name="radioChoice"
+                        value={true}>
                         Public
                       </Radio>
-                      <Radio name="radioChoice" value={false}>
+                      <Radio
+                        onClick={() => {
+                          setPublicNew(false);
+                        }}
+                        name="radioChoice"
+                        value={false}>
                         Invite Only
                       </Radio>
                     </Stack>
@@ -207,23 +359,20 @@ export default function TournamentCard({ type, tourid, condition }) {
             <Image
               size="100%"
               objectFit="fill"
-              src={ImageSrc}
+              src={newTourImageURL}
               alt="Tournament Image"
             />
           </div>
           <div className="TournamentCardDetails">
-            <div id="TournamentCardName">{tournamentData.name}</div>
-            <div id="TournamentCardActive">Active:</div>
-            <div id="TCardActiveValue">{TourActive}</div>
-            <div id="TournamentCardLocked">Locked In:</div>
-            <div id="TCardLockedValue">{TourLocked}</div>
-            <div id="TournamentCardDates">Dates: </div>
-            <div id="TCardDatesValue">
-              {TourStartDate} - {TourEndDate}
-            </div>
+            <div id="TournamentCardName">{tournamentData.tournamentName}</div>
+            <div id="TournamentCardActive">Public Status:</div>
+            <div id="TCardActiveValue">{`${tournamentData.publicStatus}`}</div>
+            <div id="TournamentCardLocked">Locked In Status:</div>
+            <div id="TCardLockedValue">{`${tournamentData.lockedInStatus}`}</div>
+            <div id="TCardHostName">Host: </div>
+            <div id="TCardHostNameValue">{tournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>
-
-            <div id="TCardIDValue">#{TourID}</div>
+            <div id="TCardIDValue">#{tournamentData.id}</div>
           </div>
 
           <div className="ViewTournamentButtonDiv">
@@ -254,28 +403,20 @@ export default function TournamentCard({ type, tourid, condition }) {
             <Image
               size="100%"
               objectFit="fill"
-              src={ImageSrc}
+              src={newTourImageURL}
               alt="Tournament Image"
             />
           </div>
           <div className="TournamentCardDetails">
-            {type === "tour1" ? (
-              <div id="TournamentCardName">Tournament 1</div>
-            ) : (
-              <div id="TournamentCardName">Tournament 2</div>
-            )}
-
-            <div id="TournamentCardActive">Active:</div>
-            <div id="TCardActiveValue">{TourActive}</div>
-            <div id="TournamentCardLocked">Locked In:</div>
-            <div id="TCardLockedValue">{TourLocked}</div>
-            <div id="TournamentCardDates">Dates: </div>
-            <div id="TCardDatesValue">
-              {TourStartDate} - {TourEndDate}
-            </div>
+            <div id="TournamentCardName">{tournamentData.tournamentName}</div>
+            <div id="TournamentCardActive">Public Status:</div>
+            <div id="TCardActiveValue">{`${tournamentData.publicStatus}`}</div>
+            <div id="TournamentCardLocked">Locked In Status:</div>
+            <div id="TCardLockedValue">{`${tournamentData.lockedInStatus}`}</div>
+            <div id="TCardHostName">Host: </div>
+            <div id="TCardHostNameValue">{tournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>
-
-            <div id="TCardIDValue">#{TourID}</div>
+            <div id="TCardIDValue">#{tournamentData.id}</div>
           </div>
           <div className="StatsTourCard">
             <div className="more-info">
@@ -287,6 +428,7 @@ export default function TournamentCard({ type, tourid, condition }) {
                 <AccordionItem defaultIsOpen="false">
                   {({ isExpanded }) => (
                     <>
+                    
                       <AccordionHeader
                         border="none"
                         borderRadius="10px"
@@ -299,7 +441,7 @@ export default function TournamentCard({ type, tourid, condition }) {
                       </AccordionHeader>
                       <AccordionPanel>
                         <div className="acc-element" id="TourRegisteredTeams">
-                          Registered Teams: {16}
+                          Locked Teams: {`num`}/16
                         </div>
                         <div className="acc-element" id="AverageRankingPoints">
                           Average Team RP: {360}/400

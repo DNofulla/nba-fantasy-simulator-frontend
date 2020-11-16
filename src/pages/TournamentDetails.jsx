@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import "../styles/TournamentDetails.css";
 import { Tab, TabList, TabPanels, Tabs, TabPanel } from "@chakra-ui/core";
@@ -7,9 +7,47 @@ import Chat from "../components/Chat";
 import Leaderboard from "../components/Leaderboard";
 import TeamSelection from "../components/TeamSelection";
 import MatchHistory from "../components/MatchHistory";
+import Axios from "axios";
+import userContext from "../services/userContext";
 
 export default function TournamentDetails(props) {
   const [myTeamRP, setMyTeamRP] = useState();
+  const { userData, setUserData } = useContext(userContext);
+  const [tournamentData, setTournamentData] = useState({});
+  const [teamData, setTeamData] = useState([]);
+
+  useEffect(() => {
+    const id = userData.user.id;
+
+    Axios.get("http://localhost:8080/userInfo/byId/" + id, {
+      headers: {
+        Authorization: "Bearer " + userData.token,
+      },
+    }).then((res) => {
+      setUserData({
+        token: userData.token,
+        user: res.data,
+      });
+
+      if (props.tourIdProp !== "none" && props.tourIdProp !== null) {
+        Axios.get("/tournaments/getTournamentDataById", {
+          params: {
+            tournamentId: props.tourIdProp,
+          },
+          headers: {
+            Authorization: "Bearer " + userData.token,
+          },
+        })
+          .then((res) => {
+            console.log(res);
+            setTournamentData(res.data);
+          })
+          .then((err) => {
+            console.log(err);
+          });
+      }
+    });
+  }, []);
 
   return (
     <div className="TournamentDetails">
