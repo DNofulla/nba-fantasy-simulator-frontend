@@ -15,7 +15,6 @@ export default function Chat(props) {
   const [chatMessages, setChatMessages] = useState([]);
 
   useEffect(() => {
-    const name = userData.user.username;
     socket.on("message", (message) => {
       setChatMessages((chatMessages) => [...chatMessages, message]);
     });
@@ -37,11 +36,11 @@ export default function Chat(props) {
   };
 
   return (
-    <div className={props.chatClass}>
+    <div className="ChatBox">
       <div className="ChatTitleSection">
         <h1 id="chatName">{props.chatName}</h1>
       </div>
-      <div className={props.icd} style={{ color: "black" }}>
+      <div className="InnerChatDiv" style={{ color: "black" }}>
         {chatMessages.map((data, index) => (
           <div className="messageBoxWrapper" key={index}>
             <div className="usernameChatDivMessage">{data.user}</div>

@@ -45,6 +45,8 @@ export default function LoginRegister(props) {
         password: loginPassword,
       };
 
+      console.log(userLoginInfo);
+
       const res = await Axios.post("http://localhost:8080/login/signin", null, {
         params: userLoginInfo,
       });
@@ -68,11 +70,13 @@ export default function LoginRegister(props) {
       } else {
         toast({
           title: "Invalid Credentials!",
-          description: "Please try again!",
+          description: res.data.error,
           status: "error",
           duration: 2000,
           isClosable: false,
         });
+        setLoginEmail("");
+        setLoginPassword("");
       }
 
       console.log(res);
@@ -125,12 +129,17 @@ export default function LoginRegister(props) {
       }
 
       if (check === true && !error1 && !error2 && !error3 && !error4) {
+        console.log(registerEmail);
+        console.log(registerUsername);
+        console.log(registerPassword);
+        console.log(registerConfirmPassword);
+
         const response = await Axios.post(
           "http://localhost:8080/login/signup",
           {
+            password: registerPassword,
             username: registerUsername,
             email: registerEmail,
-            password: registerPassword,
             firstName: registerFirstName,
             lastName: registerLastName,
           }
