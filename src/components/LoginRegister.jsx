@@ -34,7 +34,6 @@ export default function LoginRegister(props) {
   const [error2, setError2] = useState();
   const [error3, setError3] = useState();
   const [error4, setError4] = useState();
-  const [error5, setError5] = useState();
   const [check, setCheck] = useState(false);
 
   const loginAuthAttempt = async (e) => {
@@ -52,7 +51,7 @@ export default function LoginRegister(props) {
 
       console.log(res.data);
 
-      if (res.status === 200) {
+      if (res.status === 200 && !res.data.error) {
         toast({
           title: "Logged In!",
           description: "Authentication Successful!",
@@ -467,7 +466,7 @@ export default function LoginRegister(props) {
                   </Tooltip>
                 </FormControl>
               </div>
-              {error1 || error2 || error3 || error4 || error5 ? (
+              {error1 || error2 || error3 || error4 ? (
                 <div
                   style={{
                     marginTop: "70px",
@@ -479,7 +478,6 @@ export default function LoginRegister(props) {
                   <div>{error2 ? error2 : null}</div>
                   <div>{error3 ? error3 : null}</div>
                   <div>{error4 ? error4 : null}</div>
-                  <div>{error5 ? error5 : null}</div>
                 </div>
               ) : null}
             </TabPanel>

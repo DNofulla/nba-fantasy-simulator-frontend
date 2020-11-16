@@ -13,7 +13,7 @@ export default function Homepage() {
           <LeagueNews />
         </div>
         <div className="home-element" id="home-lb">
-          <Leaderboard type="Global" />
+          <Leaderboard type="Global" superType="Global User" />
         </div>
         <div className="home-element" id="home-chat">
           <Chat chatClass="ChatBox" icd="InnerChatDiv" chatName="Global Chat" />

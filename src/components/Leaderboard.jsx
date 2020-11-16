@@ -116,7 +116,7 @@ function generateLeaderboard() {
   return tableRows;
 }
 
-export default function Leaderboard(props) {
+export default function Leaderboard({ type, superType }) {
   return (
     <div style={{ color: "black" }} className="Leaderboard">
       <h1
@@ -126,7 +126,7 @@ export default function Leaderboard(props) {
           paddingTop: "5px",
           paddingBottom: "5px",
         }}>
-        {props.type} Leaderboard
+        {superType} Leaderboard
       </h1>
       <div className="innerLeaderboard">
         <table style={{ color: "white" }} className="LeaderboardTable">
