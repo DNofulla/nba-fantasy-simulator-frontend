@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import userContext from "../services/userContext";
 import "../styles/Chat.css";
-import moment from "moment";
 
 const socket = io.connect("http://localhost:3001", {
   transports: ["websocket", "polling"],

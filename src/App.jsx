@@ -10,9 +10,9 @@ import { useEffect } from "react";
 import Axios from "axios";
 import NavBar from "./components/NavBar";
 import userContext from "./services/userContext";
+import JoinTournament from "./pages/JoinTournament";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({
     token: undefined,
     user: undefined,
@@ -65,6 +65,11 @@ export default function App() {
                   tourIdProp={props.match.params.tourid}
                 />
               )}
+            />
+            <Route
+              path="/MyTournaments/JoinTournament"
+              exact
+              component={JoinTournament}
             />
           </Switch>
         </userContext.Provider>

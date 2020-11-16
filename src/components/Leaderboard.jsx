@@ -126,10 +126,12 @@ export default function Leaderboard(props) {
           paddingTop: "5px",
           paddingBottom: "5px",
         }}>
-        Leaderboard
+        {props.type} Leaderboard
       </h1>
       <div className="innerLeaderboard">
-        <table style={{ color: "white" }} className="LeaderboardTable">{generateLeaderboard()}</table>
+        <table style={{ color: "white" }} className="LeaderboardTable">
+          {generateLeaderboard()}
+        </table>
       </div>
     </div>
   );

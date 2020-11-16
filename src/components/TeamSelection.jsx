@@ -13,7 +13,6 @@ import {
 } from "@chakra-ui/core";
 import PlayerCard from "./PlayerCard";
 import { playersAvailable } from "../services/playersAvailable";
-import { MdRefresh } from "react-icons/md";
 
 export default function TeamSelection({ setMyTeamRP }) {
   const [playerRankingPoints, setPlayerRankingPoints] = useState(0);
@@ -174,21 +173,6 @@ export default function TeamSelection({ setMyTeamRP }) {
                 }}>
                 Roster Selection
               </Tab>
-              {locked || isLockedIn ? null : (
-                <Tab
-                  mb="0"
-                  bg="rgb(58, 29, 153)"
-                  style={{
-                    color: "#ede7e3",
-                    border: "none",
-                    boxShadow: "none",
-                    outline: "none",
-                    borderRadius: 0,
-                    borderRight: "1px solid #ede7e3",
-                  }}>
-                  Active Players
-                </Tab>
-              )}
             </TabList>
 
             <TabPanels borderTop="1px solid #ede7e3;" color="#ede7e3">
@@ -217,40 +201,7 @@ export default function TeamSelection({ setMyTeamRP }) {
                       height: "680px",
                       backgroundColor: "rgba(34, 168, 168, 0.8)",
                     }}>
-                    <div className="ifLockedInButton">
-                      <Tooltip
-                        label="Unlock Players"
-                        placement="bottom"
-                        bg="red.600">
-                        <Button
-                          variantColor="red"
-                          onClick={() => {
-                            toast({
-                              title: "Active Players Un-Locked!",
-                              description:
-                                "Your Active players have been Un-Locked!",
-                              status: "error",
-                              duration: 2000,
-                              isClosable: true,
-                            });
-                            setIsLockedIn(false);
-                            setLocked(true);
-                            rosterPlayers.splice(0, rosterPlayers.length);
-                            activePlayers.splice(0, activePlayers.length);
-                            setPlayerRankingPoints(0);
-                            setMyTeamRP(0);
-                          }}>
-                          Un-Lock{" "}
-                          <Icon
-                            marginLeft="0px"
-                            style={{ float: "left", marginLeft: "10px" }}
-                            name="not-allowed"
-                            size="28px"
-                            color="#ede7e3"
-                          />
-                        </Button>
-                      </Tooltip>
-                    </div>
+                    <div className="ifLockedInButton">PLAYERS LOCKED IN</div>
                   </div>
                 </TabPanel>
               ) : (
@@ -260,26 +211,19 @@ export default function TeamSelection({ setMyTeamRP }) {
                   </div>
                 </TabPanel>
               )}
-              {locked ? null : (
-                <TabPanel>
-                  <div className="SecondaryTabsActivePlayers">
-                    {generatePlayerDivs(rosterPlayers)}
-                  </div>
-                </TabPanel>
-              )}
             </TabPanels>
           </Tabs>
         </div>
 
-        {canLockIn ? (
+        {!isLockedIn ? (
           <div className="ActionsTeamSelection" style={{ textAlign: "center" }}>
             <Tooltip label="Save Changes" placement="bottom" bg="blue.500">
               <Button
                 variantColor="blue"
                 onClick={() => {
                   toast({
-                    title: "Active Players Saved!",
-                    description: "Your Active players have been locked!",
+                    title: "Team Saved!",
+                    description: "Team Players Saved!",
                     status: "success",
                     duration: 2000,
                     isClosable: true,

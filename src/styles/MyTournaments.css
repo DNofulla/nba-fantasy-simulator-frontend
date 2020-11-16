@@ -4,13 +4,13 @@
   display: flex;
 }
 
-#GlobalTour {
+#Tour1 {
   margin-left: auto;
   border-radius: 15px;
   box-shadow: 0 2px 15px 5px black;
 }
 
-#FriendsTour {
+#Tour2 {
   margin: auto;
   border-radius: 15px;
   box-shadow: 0 2px 15px 5px black;

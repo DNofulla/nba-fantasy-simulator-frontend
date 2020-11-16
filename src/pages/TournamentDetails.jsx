@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import "../styles/TournamentDetails.css";
@@ -34,82 +33,80 @@ export default function TournamentDetails(props) {
         </div>
 
         <div className="innerTournamentDetails">
-        <div className="NavBarTabsTournamentDetails">
-          <Tabs isFitted variant="enclosed">
-            <TabList h="70px">
-              <Tab
-                mt="-1px"
-                bg="#82c0cc"
-                _selected= {{ color: 'black', bg: '#ffa62b'}}
-                style={{
-                  color: "black",
-                  border: "none",
-                  boxShadow: "none",
-                  outline: "none",
-                  borderRadius: "10px 0 0 0",
-                }}
-              >
-                My Team
-              </Tab>
-              <Tab
-                mt="-1px"
-                bg="#82c0cc"
-                _selected= {{ color: 'black', bg: '#ffa62b'}}
-                style={{
-                  color: "black",
-                  border: "none",
-                  boxShadow: "none",
-                  outline: "none",
-                  borderRadius: 0,
-                }}
-              >
-                Past and Upcoming Matches
-              </Tab>
-              <Tab
-                mt="-1px"
-                bg="#82c0cc"
-                _selected= {{ color: 'black', bg: '#ffa62b'}}
-                style={{
-                  color: "black",
-                  border: "none",
-                  boxShadow: "none",
-                  outline: "none",
-                  borderRadius: "0 10px 0 0",
-                }}
-              >
-                Chat and Leaderboard
-              </Tab>
-            </TabList>
+          <div className="NavBarTabsTournamentDetails">
+            <Tabs isFitted variant="enclosed">
+              <TabList h="70px">
+                <Tab
+                  mt="-1px"
+                  bg="#82c0cc"
+                  _selected={{ color: "black", bg: "#ffa62b" }}
+                  style={{
+                    color: "black",
+                    border: "none",
+                    boxShadow: "none",
+                    outline: "none",
+                    borderRadius: "10px 0 0 0",
+                  }}>
+                  My Team
+                </Tab>
+                <Tab
+                  mt="-1px"
+                  bg="#82c0cc"
+                  _selected={{ color: "black", bg: "#ffa62b" }}
+                  style={{
+                    color: "black",
+                    border: "none",
+                    boxShadow: "none",
+                    outline: "none",
+                    borderRadius: 0,
+                  }}>
+                  Past and Upcoming Matches
+                </Tab>
+                <Tab
+                  mt="-1px"
+                  bg="#82c0cc"
+                  _selected={{ color: "black", bg: "#ffa62b" }}
+                  style={{
+                    color: "black",
+                    border: "none",
+                    boxShadow: "none",
+                    outline: "none",
+                    borderRadius: "0 10px 0 0",
+                  }}>
+                  Chat and Leaderboard
+                </Tab>
+              </TabList>
 
-            <TabPanels color="black">
-              <TabPanel>
-                <div id="TourDetailsPanel1">
-                  <TeamSelection setMyTeamRP={(val) => setMyTeamRP(val)} />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div id="TourDetailsPanel2">
-                  <MatchHistory type="Match History" bgColor="" />
-                  <MatchHistory
-                    type="Upcoming Matches"
-                    bgColor="#ffa62b"
-                  />
-                </div>
-              </TabPanel>
-              <TabPanel>
-                <div id="TourDetailsPanel3">
+              <TabPanels color="black">
+                <TabPanel>
+                  <div id="TourDetailsPanel1">
+                    <TeamSelection setMyTeamRP={(val) => setMyTeamRP(val)} />
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div id="TourDetailsPanel2">
+                    <MatchHistory type="Match History" bgColor="" />
+                    <MatchHistory type="Upcoming Matches" bgColor="#ffa62b" />
+                  </div>
+                </TabPanel>
+                <TabPanel>
+                  <div id="TourDetailsPanel3">
                     <div id="tour-chat">
-                      <Chat chatClass="ChatBox" icd="InnerChatDiv" chatName="Tournament Chat" />
+                      <Chat
+                        chatClass="ChatBox"
+                        icd="InnerChatDiv"
+                        chatName="Tournament Chat"
+                      />
                     </div>
                     <div id="tour-lb">
                       <Leaderboard />
                     </div>
-                </div>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+                  </div>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
