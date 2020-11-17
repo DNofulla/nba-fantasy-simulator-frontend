@@ -19,7 +19,6 @@ export default function App() {
   });
 
   useEffect(() => {
-    
     const validateJWT = async () => {
       let jwtToken = localStorage.getItem("auth-token");
       if (jwtToken === null) {
@@ -58,12 +57,13 @@ export default function App() {
             <Route path="/MyTournaments" exact component={MyTournaments} />
             <Route path="/Profile" exact component={ProfilePage} />
             <Route
-              path="/TournamentDetails/:tourid"
+              path="/TournamentDetails/:tourid/:type"
               exact
               render={(props) => (
                 <TournamentDetails
                   {...props}
                   tourIdProp={props.match.params.tourid}
+                  type={props.match.params.type}
                 />
               )}
             />

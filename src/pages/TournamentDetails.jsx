@@ -11,10 +11,14 @@ import Axios from "axios";
 import userContext from "../services/userContext";
 
 export default function TournamentDetails(props) {
-  const [myTeamRP, setMyTeamRP] = useState();
+  const [myTeamRP, setMyTeamRP] = useState(0);
   const { userData, setUserData } = useContext(userContext);
   const [tournamentData, setTournamentData] = useState({});
-  const [teamData, setTeamData] = useState([]);
+  const [teamData, setTeamData] = useState({});
+  const [matchesRemaining, setMatchesRemaining] = useState([]);
+  const [allMatchData, setAllMatchData] = useState([]);
+  const [matchesPlayed, setMatchesPlayed] = useState([]);
+  const [type, setTypeValue] = useState();
 
   useEffect(() => {
     const id = userData.user.id;
@@ -30,7 +34,7 @@ export default function TournamentDetails(props) {
       });
 
       if (props.tourIdProp !== "none" && props.tourIdProp !== null) {
-        Axios.get("/tournaments/getTournamentDataById", {
+        Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
           params: {
             tournamentId: props.tourIdProp,
           },
@@ -45,6 +49,45 @@ export default function TournamentDetails(props) {
           .then((err) => {
             console.log(err);
           });
+
+        Axios.get("http://localhost:8080/team", {
+          headers: {
+            Authorization: "Bearer " + userData.token,
+          },
+        })
+          .then((res) => {
+            console.log(res.data);
+            setTeamData(res.data);
+          })
+          .then((err) => {
+            console.log(err);
+          });
+
+        Axios.get(
+          "http://localhost:8080/match/tournament/" + props.tourIdProp,
+          {
+            headers: {
+              Authorization: "Bearer " + userData.token,
+            },
+          }
+        )
+          .then((response) => {
+            console.log(response);
+            if (response.data.length === 0) {
+              setMatchesPlayed([]);
+              setMatchesRemaining([]);
+            } else {
+              for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].isPlayed) {
+                  setMatchesPlayed([...matchesPlayed, response.data[i]]);
+                } else {
+                  setMatchesRemaining([...matchesRemaining, response.data[i]]);
+                }
+                setAllMatchData([...allMatchData, response.data[i]]);
+              }
+            }
+          })
+          .then((error) => {});
       }
     });
   }, []);
@@ -54,18 +97,10 @@ export default function TournamentDetails(props) {
       <div id="tcd-wrapper">
         <div className="TourCardDetailsPageDiv">
           <TournamentCard
-            type="Global"
-            available="Yes"
-            locked="No"
-            df="10"
-            mf="15"
-            yf="2020"
-            dt="10"
-            mt="15"
-            yt="2020"
+            setTypeValue={(value) => setTypeValue(value)}
             tourid={props.tourIdProp}
             imgsrc="https://i.pinimg.com/originals/0d/62/c5/0d62c5a2849ad4e0722d01deba9e363a.jpg"
-            tournamentDetail={true}
+            condition="TOUR_DETAILS"
             myTeamRP={myTeamRP}
           />
         </div>
@@ -118,7 +153,12 @@ export default function TournamentDetails(props) {
               <TabPanels color="black">
                 <TabPanel>
                   <div id="TourDetailsPanel1">
-                    <TeamSelection setMyTeamRP={(val) => setMyTeamRP(val)} />
+                    <TeamSelection
+                      type={type}
+                      tourInfoId={props.tourIdProp}
+                      myTeamRP={myTeamRP}
+                      setMyTeamRP={(val) => setMyTeamRP(val)}
+                    />
                   </div>
                 </TabPanel>
                 <TabPanel>

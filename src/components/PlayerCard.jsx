@@ -14,7 +14,7 @@ export default function PlayerCard({
   rb,
   st,
   onChange,
-  type
+  type,
 }) {
   const [isChecked, setIsChecked] = useState(false);
   const [average2Pointers, setAverage2Pointers] = useState(0);
@@ -45,7 +45,9 @@ export default function PlayerCard({
         <Image
           size="100%"
           objectFit="fill"
-          src="https://i.pinimg.com/originals/0d/62/c5/0d62c5a2849ad4e0722d01deba9e363a.jpg"
+          src={
+            "https://cdn.nba.com/headshots/nba/latest/260x190/" + id + ".png"
+          }
           alt="Tournament Image"
         />
       </div>
@@ -75,8 +77,9 @@ export default function PlayerCard({
           {averageSteals} Steals
         </div>
 
-        <div style={{ fontSize: "20px", marginBottom: "5px", color: "#82c0cc" }}>
-          {rankingPoints} Ranking Points
+        <div
+          style={{ fontSize: "20px", marginBottom: "5px", color: "#82c0cc" }}>
+          {rankingPoints > 100 ? 100 : rankingPoints} Ranking Points
         </div>
         <Progress
           borderRadius="15px"
@@ -86,7 +89,7 @@ export default function PlayerCard({
           size="lg"
           m="auto"
           w="80%"
-          value={rankingPoints}
+          value={rankingPoints > 100 ? 100 : rankingPoints}
         />
       </div>
       {type !== "NO" ? (
@@ -96,28 +99,38 @@ export default function PlayerCard({
             size="lg"
             variantColor="yellow"
             defaultIsunChecked
-            onChange={(event) => {
+            onChange={() => {
+              let val = 0;
+              if (rankingPoints > 100) {
+                val = 100;
+              } else {
+                val = rankingPoints;
+              }
+
+              console.log("ID1");
+              console.log(id);
               setIsChecked(!isChecked);
               const PlayerDataChecked = {
                 id: id,
                 name: name,
-                rp: rankingPoints,
+                rp: -val,
                 count: 1,
               };
+              console.log(PlayerDataChecked.id);
 
               const PlayerDataUnChecked = {
                 id: id,
                 name: name,
-                rp: -rankingPoints,
+                rp: val,
                 count: -1,
               };
+              console.log(val);
               if (isChecked) {
-                onChange(PlayerDataUnChecked);
-              } else {
                 onChange(PlayerDataChecked);
+              } else {
+                onChange(PlayerDataUnChecked);
               }
-            }}
-          >
+            }}>
             Select Player
           </Checkbox>
         </div>

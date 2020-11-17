@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../styles/TeamSelection.css";
 import {
   Tab,
@@ -13,21 +13,70 @@ import {
 } from "@chakra-ui/core";
 import PlayerCard from "./PlayerCard";
 import { playersAvailable } from "../services/playersAvailable";
+import userContext from "../services/userContext";
+import Axios from "axios";
+import { useHistory } from "react-router";
 
-export default function TeamSelection({ setMyTeamRP }) {
+export default function TeamSelection({
+  setMyTeamRP,
+  myTeamRP,
+  tourInfoId,
+  type,
+  setType,
+}) {
+  const [teamData, setTeamData] = useState({});
   const [playerRankingPoints, setPlayerRankingPoints] = useState(0);
   const [rosterPlayersCount, setRosterPlayersCount] = useState();
-  const [activePlayersCount, setActivePlayersCount] = useState();
+  const [activePlayersCount, setActivePlayersCount] = useState(0);
+  const [tournamentData, setTournamentData] = useState({});
+
+  const [teamRankingPoints, setTeamRankingPoints] = useState(0);
+  const [allPlayers, setAllPlayers] = useState([]);
+  const [lockedInPlayers, setLockedInPlayers] = useState([]);
+
   const [rosterPlayers, setRosterPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
+
+  const { userData, setUserData } = useContext(userContext);
+
   const [canLockIn, setCanLockIn] = useState(false);
   const [isLockedIn, setIsLockedIn] = useState(false);
   const [locked, setLocked] = useState(true);
 
+  const history = useHistory();
+
   const toast = useToast();
 
+  useEffect(() => {
+    Axios.get("http://localhost:8080/player", {
+      headers: {
+        Authorization: "Bearer " + userData.token,
+      },
+    })
+      .then((res) => {
+        setAllPlayers(res.data);
+      })
+      .then((err) => {
+        console.log(err);
+      });
+
+    Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
+      params: {
+        tournamentId: tourInfoId,
+      },
+      headers: {
+        Authorization: "Bearer " + userData.token,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        setTournamentData(res.data);
+      })
+      .then((err) => {});
+  }, []);
+
   function getPlayerDataById(val) {
-    const result = playersAvailable.find((obj) => {
+    const result = allPlayers.find((obj) => {
       return obj.id === val;
     });
     return result;
@@ -35,102 +84,67 @@ export default function TeamSelection({ setMyTeamRP }) {
 
   function generatePlayerDivs(data) {
     let players = [];
-    if (data === undefined || data === null) {
-      for (let i = 0; i < playersAvailable.length; i++) {
-        players.push(
-          <PlayerCard
-            onChange={(value) => {
-              if (value.count > 0) {
-                rosterPlayers.push(value.id);
-              } else {
-                const index = rosterPlayers.indexOf(value.id);
-                console.log(index);
-                rosterPlayers.splice(index, 1);
-              }
-              setRosterPlayersCount(rosterPlayersCount + value.count);
-              if (rosterPlayers.length === 10) {
-                setLocked(false);
-              } else {
-                setLocked(true);
-                setCanLockIn(false);
-                setActivePlayersCount(0);
-                setIsLockedIn(false);
-                setPlayerRankingPoints(0);
-                setMyTeamRP(0);
-                activePlayers.splice(0, activePlayers.length);
-              }
-            }}
-            name={playersAvailable[i].name}
-            rankingPoints={playersAvailable[i].rankingPoints}
-            id={playersAvailable[i].id}
-            pts2={playersAvailable[i].pts2}
-            pts3={playersAvailable[i].pts3}
-            asst={playersAvailable[i].asst}
-            ft={playersAvailable[i].ft}
-            b={playersAvailable[i].b}
-            rb={playersAvailable[i].rb}
-            st={playersAvailable[i].st}
-          />
-        );
-      }
-    } else {
-      let rosterData = [];
-      for (let i = 0; i < 10; i++) {
-        rosterData.push(getPlayerDataById(data[i]));
-        players.push(
-          <PlayerCard
-            onChange={(value) => {
-              if (value.count > 0) {
-                activePlayers.push(value.id);
-              } else {
-                const index = activePlayers.indexOf(value.id);
-                console.log(index);
-                activePlayers.splice(index, 1);
-              }
-              setActivePlayersCount(activePlayersCount + value.count);
-              setMyTeamRP(playerRankingPoints + value.rp);
-              setPlayerRankingPoints(playerRankingPoints + value.rp);
+    for (let i = 0; i < allPlayers.length; i++) {
+      players.push(
+        <PlayerCard
+          onChange={(value) => {
+            if (value.count > 0) {
+              activePlayers.push(value.id);
+              console.log(value.id);
+              setActivePlayersCount(activePlayersCount + 1);
+            } else {
+              const index = activePlayers.indexOf(value.id);
+              activePlayers.splice(index, 1);
+              setActivePlayersCount(activePlayersCount - 1);
+            }
 
-              if (activePlayers.length === 5) {
-                setCanLockIn(true);
-              } else {
-                setCanLockIn(false);
-              }
-            }}
-            name={rosterData[i].name}
-            rankingPoints={rosterData[i].rankingPoints}
-            id={rosterData[i].id}
-            pts2={rosterData[i].pts2}
-            pts3={rosterData[i].pts3}
-            asst={rosterData[i].asst}
-            ft={rosterData[i].ft}
-            b={rosterData[i].b}
-            rb={rosterData[i].rb}
-            st={rosterData[i].st}
-          />
-        );
-      }
+            setMyTeamRP(playerRankingPoints + value.rp);
+            setPlayerRankingPoints(playerRankingPoints + value.rp);
+            console.log(activePlayersCount);
+            console.log(activePlayers.length);
+            if (activePlayers.length === 5) {
+              setCanLockIn(true);
+            } else {
+              setCanLockIn(false);
+            }
+          }}
+          name={data[i].name}
+          rankingPoints={Math.round((data[i].pts / 992) * 100)}
+          id={data[i].id}
+          pts2={data[i].fgm}
+          pts3={Math.round((data[i].pts - data[i].fgm * 2 - data[i].ftm) / 3)}
+          asst={data[i].ast}
+          ft={data[i].ftm}
+          b={data[i].blk}
+          rb={data[i].dreb + data[i].oreb}
+          st={data[i].stl}
+        />
+      );
     }
     return players;
   }
 
   function getActivePlayers(data) {
     let players = [];
-    let rosterData = [];
     for (let i = 0; i < 5; i++) {
-      rosterData.push(getPlayerDataById(data[i]));
+      lockedInPlayers.push(getPlayerDataById(activePlayers[i]));
       players.push(
         <PlayerCard
-          name={rosterData[i].name}
-          rankingPoints={rosterData[i].rankingPoints}
-          id={rosterData[i].id}
-          pts2={rosterData[i].pts2}
-          pts3={rosterData[i].pts3}
-          asst={rosterData[i].asst}
-          ft={rosterData[i].ft}
-          b={rosterData[i].b}
-          rb={rosterData[i].rb}
-          st={rosterData[i].st}
+          name={lockedInPlayers[i].name}
+          rankingPoints={Math.round((lockedInPlayers[i].pts / 992) * 100)}
+          id={lockedInPlayers[i].id}
+          pts2={lockedInPlayers[i].fgm}
+          pts3={Math.round(
+            (lockedInPlayers[i].pts -
+              lockedInPlayers[i].fgm * 2 -
+              lockedInPlayers[i].ftm) /
+              3
+          )}
+          asst={lockedInPlayers[i].ast}
+          ft={lockedInPlayers[i].ftm}
+          b={lockedInPlayers[i].blk}
+          rb={lockedInPlayers[i].dreb + lockedInPlayers.oreb}
+          st={lockedInPlayers[i].stl}
           type="NO"
         />
       );
@@ -177,9 +191,9 @@ export default function TeamSelection({ setMyTeamRP }) {
 
             <TabPanels borderTop="1px solid #ede7e3;" color="#ede7e3">
               <TabPanel>
-                {isLockedIn ? (
+                {isLockedIn && canLockIn ? (
                   <div className="SecondaryTabsTeamStats">
-                    {getActivePlayers(activePlayers)}
+                    {getActivePlayers(allPlayers)}
                   </div>
                 ) : (
                   <div className="SecondaryTabsTeamStats">
@@ -188,7 +202,7 @@ export default function TeamSelection({ setMyTeamRP }) {
                         float: "left",
                         margin: "auto",
                       }}>
-                      NO PLAYER DATA
+                      NO PLAYER DATA / ROSTER NOT LOCKED
                     </h1>
                   </div>
                 )}
@@ -207,7 +221,7 @@ export default function TeamSelection({ setMyTeamRP }) {
               ) : (
                 <TabPanel>
                   <div className="SecondaryTabsRosterSelection">
-                    {generatePlayerDivs()}
+                    {allPlayers[0] ? generatePlayerDivs(allPlayers) : null}
                   </div>
                 </TabPanel>
               )}
@@ -216,20 +230,104 @@ export default function TeamSelection({ setMyTeamRP }) {
         </div>
 
         {!isLockedIn ? (
-          <div className="ActionsTeamSelection" style={{ textAlign: "center" }}>
+          <div
+            className="ActionsTeamSelection"
+            style={{ textAlign: "center", marginTop: "5px" }}>
             <Tooltip label="Save Changes" placement="bottom" bg="blue.500">
               <Button
+                marginTop="5px"
                 variantColor="blue"
                 onClick={() => {
-                  toast({
-                    title: "Team Saved!",
-                    description: "Team Players Saved!",
-                    status: "success",
-                    duration: 2000,
-                    isClosable: true,
-                  });
-                  setIsLockedIn(true);
-                  setCanLockIn(false);
+                  var result = "";
+                  var characters =
+                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                  var charactersLength = characters.length;
+                  for (var i = 0; i < 14; i++) {
+                    result += characters.charAt(
+                      Math.floor(Math.random() * charactersLength)
+                    );
+                  }
+                  Axios.post(
+                    "http://localhost:8080/team/createTeam",
+                    {
+                      id: result,
+                      userId: userData.user.id,
+                      playerIdList: activePlayers,
+                      power: myTeamRP,
+                      totalPoints: 0,
+                      tourId: tournamentData.id,
+                    },
+                    {
+                      headers: {
+                        Authorization: "Bearer " + userData.token,
+                      },
+                    }
+                  )
+                    .then((res) => {
+                      console.log(res.data);
+
+                      Axios.post(
+                        "http://localhost:8080/userInfo/update/" +
+                          userData.user.id,
+                        {
+                          id: userData.user.id,
+                          username: userData.user.username,
+                          password: userData.user.password,
+                          email: userData.user.email,
+                          firstName: userData.user.firstName,
+                          lastName: userData.user.lastName,
+                          friendIDs: userData.user.friendIDs,
+                          announcementIDs: userData.user.announcementIDs,
+                          accountPoints: userData.user.accountPoints,
+                          team1Id:
+                            type === "tour1" ? result : userData.user.team1Id,
+                          team2Id:
+                            type === "tour2" ? result : userData.user.team2Id,
+                          tournament1Id: userData.user.tournament1Id,
+                          tournament2Id: userData.user.tournament2Id,
+                          matchIDs: userData.user.matchIDs,
+                        },
+                        {
+                          headers: {
+                            Authorization: "Bearer " + userData.token,
+                          },
+                        }
+                      )
+                        .then((res) => {
+                          console.log(res.data.username);
+                          setUserData({
+                            token: userData.token,
+                            user: res.data,
+                          });
+
+                          Axios.put(
+                            "http://localhost:8080/tournaments/" + tourInfoId,
+                            {
+                              headers: {
+                                Authorization: "Bearer " + userData.token,
+                              },
+                            }
+                          ).then((res) => {
+                            setTournamentData(res.data);
+                          });
+                        })
+                        .then((err) => {
+                          console.log(err);
+                        });
+
+                      toast({
+                        title: "Team Saved!",
+                        description: "Team Players Saved!",
+                        status: "success",
+                        duration: 2000,
+                        isClosable: false,
+                      });
+                      setIsLockedIn(true);
+                      setCanLockIn(true);
+                    })
+                    .then((err) => {
+                      console.log(err);
+                    });
                 }}>
                 Lock In{" "}
                 <Icon

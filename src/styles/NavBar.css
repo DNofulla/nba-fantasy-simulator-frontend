@@ -48,7 +48,9 @@
 .NavBar-li:nth-last-child(2) {
   float: right;
 }
-
+.NavBar-li:nth-last-child(3) {
+  float: right;
+}
 
 .h2tagNav {
   font-family: Arial, Helvetica, sans-serif;

@@ -29,27 +29,20 @@ import { Link, Redirect, useHistory } from "react-router-dom";
 import userContext from "../services/userContext";
 import Axios from "axios";
 
-export default function TournamentCard({ type, tourid, condition }) {
+export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
   const { userData, setUserData } = useContext(userContext);
   const disclosure1 = new useDisclosure();
-  const disclosure2 = new useDisclosure();
   const history = useHistory();
 
-  const [TourType, setTourType] = useState("");
-  const [TourActive, setTourActive] = useState("");
-  const [TourLocked, setTourLocked] = useState("");
-  const [TourStartDate, setTourStartDate] = useState("");
-  const [TourEndDate, setTourEndDate] = useState("");
-  const [TourID, setTourID] = useState("");
-  const [ImageSrc, setImageSrc] = useState("");
-  const [TourDetail, setTourDetail] = useState(false);
-  const [allTeamAverageRP, setAllTeamAverageRP] = useState();
-  const [numberOfTeams, setNumberOfTeams] = useState();
-  const [myTeamRPTourCard, setTeamRPTourCard] = useState();
-  const [totalMatches, setTotalMatches] = useState();
-  const [matchesPlayed, setMatchesPlayed] = useState();
-  const [matchesRemaining, setMatchesRemaining] = useState();
+  const [lockedTeamCount, setLockedTeamCount] = useState(0);
+  const [averageTeamRankingPoints, setAverageTeamRankingPoints] = useState(0);
+  const [totalMatchCount, setTotalMatchCount] = useState(0);
 
+  // Derived from Calls to Database
+  const [matchesRemaining, setMatchesRemaining] = useState([]);
+  const [allMatchData, setAllMatchData] = useState([]);
+  const [matchesPlayed, setMatchesPlayed] = useState([]);
+  const [myTeamRankingPoints, setMyTeamRankingPoints] = useState(0);
   const [teamData, setTeamData] = useState([]);
   const [tournamentData, setTournamentData] = useState({});
 
@@ -69,7 +62,7 @@ export default function TournamentCard({ type, tourid, condition }) {
 
   useEffect(() => {
     if (tourid !== "none" && tourid !== null) {
-      Axios.get("/tournaments/getTournamentDataById", {
+      Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
         params: {
           tournamentId: tourid,
         },
@@ -80,14 +73,50 @@ export default function TournamentCard({ type, tourid, condition }) {
         .then((res) => {
           console.log(res);
           setTournamentData(res.data);
+          if (res.data.tournamentId) {
+            setTotalMatchCount(2 * tournamentData.registeredTeamId.length);
+            setLockedTeamCount(tournamentData.registeredTeamId.length);
+          }
         })
-        .then((err) => {
-          console.log(err);
-        });
+        .then((err) => {});
+
+      Axios.get("http://localhost:8080/team", {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
+      })
+        .then((res) => {
+          console.log(res.data);
+          setTeamData(res.data);
+        })
+        .then((err) => {});
+
+      Axios.get("http://localhost:8080/match/tournament/" + tourid, {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
+      })
+        .then((response) => {
+          console.log(response);
+          if (response.data.length === 0) {
+            setMatchesPlayed([]);
+            setMatchesRemaining([]);
+          } else {
+            for (let i = 0; i < response.data.length; i++) {
+              if (response.data[i].isPlayed) {
+                setMatchesPlayed([...matchesPlayed, response.data[i]]);
+              } else {
+                setMatchesRemaining([...matchesRemaining, response.data[i]]);
+              }
+              setAllMatchData([...allMatchData, response.data[i]]);
+            }
+          }
+        })
+        .then((error) => {});
     }
   }, []);
 
-  const createTournament = async (e) => {
+  const createTournament = async () => {
     var result = "";
     var characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -366,7 +395,9 @@ export default function TournamentCard({ type, tourid, condition }) {
           <div className="TournamentCardDetails">
             <div id="TournamentCardName">{tournamentData.tournamentName}</div>
             <div id="TournamentCardActive">Public Status:</div>
-            <div id="TCardActiveValue">{`${tournamentData.publicStatus}`}</div>
+            <div id="TCardActiveValue">
+              {tournamentData.publicStatus === true ? "Public" : "Invite Only"}
+            </div>
             <div id="TournamentCardLocked">Locked In Status:</div>
             <div id="TCardLockedValue">{`${tournamentData.lockedInStatus}`}</div>
             <div id="TCardHostName">Host: </div>
@@ -378,7 +409,7 @@ export default function TournamentCard({ type, tourid, condition }) {
           <div className="ViewTournamentButtonDiv">
             <Link
               to={{
-                pathname: `/TournamentDetails/${tourid}`,
+                pathname: `/TournamentDetails/${tourid}/${type}`,
               }}>
               <Button
                 _focus={{ outline: "none", border: "none" }}
@@ -410,9 +441,15 @@ export default function TournamentCard({ type, tourid, condition }) {
           <div className="TournamentCardDetails">
             <div id="TournamentCardName">{tournamentData.tournamentName}</div>
             <div id="TournamentCardActive">Public Status:</div>
-            <div id="TCardActiveValue">{`${tournamentData.publicStatus}`}</div>
+            <div id="TCardActiveValue">
+              {tournamentData.publicStatus === true ? "Public" : "Invite Only"}
+            </div>
             <div id="TournamentCardLocked">Locked In Status:</div>
-            <div id="TCardLockedValue">{`${tournamentData.lockedInStatus}`}</div>
+            <div id="TCardLockedValue">
+              {tournamentData.lockedInStatus === true
+                ? "Locked In"
+                : "Unlocked"}
+            </div>
             <div id="TCardHostName">Host: </div>
             <div id="TCardHostNameValue">{tournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>
@@ -428,7 +465,6 @@ export default function TournamentCard({ type, tourid, condition }) {
                 <AccordionItem defaultIsOpen="false">
                   {({ isExpanded }) => (
                     <>
-                    
                       <AccordionHeader
                         border="none"
                         borderRadius="10px"
@@ -441,16 +477,17 @@ export default function TournamentCard({ type, tourid, condition }) {
                       </AccordionHeader>
                       <AccordionPanel>
                         <div className="acc-element" id="TourRegisteredTeams">
-                          Locked Teams: {`num`}/16
+                          Locked Teams: {lockedTeamCount} / 16
                         </div>
                         <div className="acc-element" id="AverageRankingPoints">
-                          Average Team RP: {360}/400
+                          Average Team RP: {averageTeamRankingPoints} / 400
                         </div>
                         <div className="acc-element" id="TourTotalMatches">
-                          Total Matches: {16 * 2}
+                          Total Matches: {totalMatchCount}
                         </div>
                         <div className="acc-element" id="TourMatchesRemaining">
-                          Matches Remaining: {12}/{16 * 2}
+                          Matches Remaining: {matchesRemaining.length} /{" "}
+                          {totalMatchCount}
                         </div>
                         <Progress
                           borderRadius="15px"
@@ -458,12 +495,15 @@ export default function TournamentCard({ type, tourid, condition }) {
                           isAnimated
                           color="red"
                           size="lg"
-                          value={(360 / 400) * 100}
+                          value={
+                            (matchesRemaining.length / totalMatchCount) * 100
+                          }
                           marginTop="5px"
                         />
 
                         <div id="TourMatchesPlayed">
-                          Matches Played: {16 * 2 - 12}/{16 * 2}
+                          Matches Played: {matchesPlayed.length} /{" "}
+                          {totalMatchCount}
                         </div>
                         <Progress
                           borderRadius="15px"
@@ -471,21 +511,21 @@ export default function TournamentCard({ type, tourid, condition }) {
                           isAnimated
                           color="yellow"
                           size="lg"
-                          value={((16 * 2 - 12) / (16 * 2)) * 100}
+                          value={(matchesPlayed.length / totalMatchCount) * 100}
                           marginTop="5px"
                         />
 
                         <div id="TeamEarnedPoints">
-                          My Team's RP: {400}
-                          /400
+                          My Team's RP: {myTeamRP} / 400
                         </div>
+
                         <Progress
                           borderRadius="15px"
                           hasStripe
                           isAnimated
                           color="pink"
                           size="lg"
-                          value={(400 / 400) * 100}
+                          value={(myTeamRP / 400) * 100}
                           marginTop="5px"
                         />
                       </AccordionPanel>

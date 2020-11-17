@@ -51,6 +51,7 @@ export default function Chat(props) {
           float="left"
           width="100%"
           type="text"
+          autoComplete="off"
           id="messageContent"
           aria-describedby="textContent"
           size="md"
