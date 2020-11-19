@@ -1,73 +1,86 @@
 .ProfilePage {
+  display: flex;
+  align-items: center;
+  margin-top: 2%;
 }
 
 .ProfileDiv {
-  width: 650px;
-  height: 500px;
+  width: 40%;
+  max-width: 700px;
   background-color:#16697a;
   border-radius: 30px;
   margin: auto;
-  margin-top: 150px;
   border: 5px solid #242423;
 }
 
 .ProfilePictureDiv {
-  float: left;
-  height: 250px;
   width: 100%;
   margin: auto;
   margin-top: 25px;
   text-align: center;
 }
 
-.UsernameProfile {
-  float: left;
-  width: 25%;
-  margin-left: 25%;
+.user-info-row {
+  display: flex;
+  margin-left: 15px;
 }
 
-.UsernameValueProfile {
-  float: left;
-  width: 25%;
-  margin-right: 25%;
+.user-field {
+  margin: auto;
+  margin-left: 8%;
 }
 
-.EmailProfile {
-  float: left;
-  width: 15%;
-  margin-left: 20%;
-}
-
-.EmailValueProfile {
-  float: left;
-  width: 50%;
-  margin-right: 15%;
-}
-
-.FirstNameProfile {
-  float: left;
-  width: 25%;
-  margin-left: 5%;
-}
-
-.FirstNameValueProfile {
-  float: left;
-  width: 20%;
-}
-
-.LastNameProfile {
-  float: left;
-  width: 25%;
-}
-
-.LastNameValueProfile {
-  float: left;
-  width: 20%;
-  margin-right: 5%;
+.user-value {
+  margin: auto;
+  margin-right: 8%;
+  color: #ffa62b;
 }
 
 .ButtonsProfileDiv {
-  float: left;
   width: 100%;
-  margin-top: 20px;
+  margin: auto;
+  margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-button {
+  margin: auto;
+  margin-top: 15px;
+}
+
+@media only screen and (max-width: 1500px) {
+  .ProfileDiv {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .ProfileDiv {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .ProfileDiv {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .ButtonsProfileDiv {
+    flex-direction: column;
+  }
+
+  .profile-button {
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }

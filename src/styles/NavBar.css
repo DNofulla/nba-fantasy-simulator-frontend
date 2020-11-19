@@ -7,17 +7,28 @@
 
 .NavBar-nav {
   width: 100%;
+  
 }
 
 .h2tagNavLogo {
+  margin: auto;
   font-family: Arial, Helvetica, sans-serif;
-  float: left;
-  display: block;
   color: #ede7e3;
   text-align: center;
   text-decoration: none;
-  font-size: 24px;
-  margin-top: 18px;
+  float: right;
+}
+
+#nav-logo {
+  margin: auto;
+  margin-left: 15px;
+  margin-right: 0;
+  font-size: 1.2em;
+}
+
+#nav-logo a {
+  display: flex;
+  align-items: center;
 }
 
 .h2tagNavLogo:hover {
@@ -30,26 +41,35 @@
   margin: 0;
   padding: 0;
   top: 0;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .NavBar-li {
-  display: inline-block;
-  float: left;
   padding-right: 10px;
   padding-left: 10px;
   cursor: pointer;
+  display: flex;
+  font-weight: bold;
 }
 
-.NavBar-li:nth-last-child(1) {
-  float: right;
+@media only screen and (min-width: 600px) {
+  .NavBar-li:nth-child(2) {
+    margin: auto;
+    margin-left: 15px;
+  }
+
+  .NavBar-li:nth-child(4) {
+    margin-right: 15px;
+  }
+
+  .NavBar-li:nth-child(5) {
+    margin-right: 15px;
+  }
 }
 
-.NavBar-li:nth-last-child(2) {
-  float: right;
-}
-.NavBar-li:nth-last-child(3) {
-  float: right;
+#menu-logout {
+  color: #f44;
 }
 
 .h2tagNav {
@@ -59,8 +79,6 @@
   color: #ede7e3;
   text-align: center;
   text-decoration: none;
-  font-size: 1.1em;
-  margin-top: 18px;
 }
 
 .h2tagNav:hover {
@@ -140,4 +158,47 @@
   margin: auto;
   float: left;
   margin-top: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .NavBar-ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    background-color: #14434d;
+    margin-top: 0;
+  }
+
+  .NavBar-li {
+    padding: 25px;
+    font-weight: bold;
+    text-align: left;
+    margin-left: 25px;
+    width: 100%;
+  }
+
+  #penguin-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #14434d;
+  }
+
+  #penguin-panel {
+    padding: 0;
+    position: relative;
+    width: 100%;
+    font-size: 1.2em;
+  }
+
+  #expand-penguin {
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 }
