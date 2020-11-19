@@ -36,3 +36,9 @@ body {
   margin-top: 15px;
   padding-top: 0;
 }
+
+@media only screen and (max-width: 550px) {
+  .home-element {
+    width: 90%;
+  }
+}
