@@ -184,7 +184,7 @@ export default function LoginRegister(props) {
 
   return (
     <div className="LoginRegister">
-      <h2 style={{ margin: 0, paddingBottom: "10px", fontSize: "30px" }}>
+      <h2 style={{ margin: 0, paddingBottom: "10px", fontSize: "1.3em" }}>
         NBA Penguin
       </h2>
       <div>

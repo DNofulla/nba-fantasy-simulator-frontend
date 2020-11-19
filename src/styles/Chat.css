@@ -63,7 +63,7 @@
   margin-left: 5px;
   width: 100%;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: .8em;
 }
 
 .chatMessageText {
@@ -71,7 +71,7 @@
   max-width: 70%;
   display: inline-block;
   word-wrap: break-word;
-  font-size: 15px;
+  font-size: .9em;
   padding: 10px;
   border-radius: 15px;
   background-color: #1c8f63;

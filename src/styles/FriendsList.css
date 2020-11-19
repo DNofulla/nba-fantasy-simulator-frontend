@@ -8,7 +8,7 @@
   
   .friendTabName {
     float: left;
-    font-size: 20px;
+    font-size: 1em;
     text-align: center;
     color: #ffa62b;
   }
@@ -21,7 +21,7 @@
   }
   
   .currentFriendName {
-    font-size: 20px;
+    font-size: 1em;
     margin-left: 10px;
     text-align: left;
     color: #ffa62b;

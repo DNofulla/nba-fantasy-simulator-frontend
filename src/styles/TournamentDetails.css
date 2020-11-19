@@ -7,7 +7,7 @@
   float: left;
   display: flex;
   flex-wrap: wrap;
-  width: 65%;
+  width: 70%;
   height: 810px;
   margin: auto;
   margin-top: 3%;
@@ -31,14 +31,14 @@
 }
 
 #TourDetailsPanel1 {
-  height: 640px;
+  height: 70vh;
   background-color: #489fb5;
   border-radius: 0 0 10px 10px;
   padding-bottom: 50px;
 }
 
 #TourDetailsPanel2 {
-  height: 640px;
+  height: 70vh;
   background-color: #489fb5;
   border-radius: 0 0 10px 10px;
   padding-bottom: 5%;
@@ -48,7 +48,7 @@
 }
 
 #TourDetailsPanel3 {
-  height: 640px;
+  height: 70vh;
   background-color: #489fb5;
   border-radius: 0 0 10px 10px;
   padding-top: 2%;
@@ -77,19 +77,49 @@
 
 .MatchHistory {
   margin-top: 50px;
+  width: 45%;
+  margin-bottom: 15px;
   margin: auto;
 }
 
 #tcd-wrapper {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 #tour-chat {
-  width: 440px;
+  width: 45%;
   margin: auto;
-  margin-bottom: 15px;
+  margin-top: 15px;
 }
 
 #tour-lb {
+  width: 45%;
   margin: auto;
+  margin-top: 15px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .innerTournamentDetails {
+    width: 90%;
+  }
+
+  #tour-chat {
+    width: 75%;
+  }
+
+  #tour-lb {
+    width: 75%;
+  }
+} 
+
+@media only screen and (max-width: 500px) {
+  #tour-chat {
+    width: 90%;
+  }
+
+  #tour-lb {
+    width: 90%;
+  }
 }
