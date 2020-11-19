@@ -62,7 +62,7 @@ export default function ProfilePage(props) {
             </div>
           </div>
           <div className="ButtonsProfileDiv">
-            <ButtonGroup spacing={8}>
+            <div className="profile-button">
               <Button
                 leftIcon="email"
                 color="black"
@@ -71,6 +71,8 @@ export default function ProfilePage(props) {
                 variant="solid">
                 Change Email
               </Button>
+            </div>
+            <div className="profile-button">
               <Button
                 leftIcon={MdBuild}
                 color="black"
@@ -79,6 +81,8 @@ export default function ProfilePage(props) {
                 variant="solid">
                 Change Password
               </Button>
+            </div>
+            <div className="profile-button">
               <Button
                 leftIcon={MdBuild}
                 color="black"
@@ -87,7 +91,7 @@ export default function ProfilePage(props) {
                 variant="solid">
                 Change Names
               </Button>
-            </ButtonGroup>
+            </div>
           </div>
         </div>
       </div>

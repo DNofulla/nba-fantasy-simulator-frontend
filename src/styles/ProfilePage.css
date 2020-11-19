@@ -5,6 +5,7 @@
 
 .ProfileDiv {
   width: 40%;
+  max-width: 700px;
   background-color:#16697a;
   border-radius: 30px;
   margin: auto;
@@ -37,6 +38,49 @@
 
 .ButtonsProfileDiv {
   width: 100%;
-  margin-top: 15px;
+  margin: auto;
   margin-bottom: 25px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-button {
+  margin: auto;
+  margin-top: 15px;
+}
+
+@media only screen and (max-width: 1500px) {
+  .ProfileDiv {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .ProfileDiv {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .ProfileDiv {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .ButtonsProfileDiv {
+    flex-direction: column;
+  }
+
+  .profile-button {
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
 }

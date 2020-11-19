@@ -47,7 +47,7 @@ export default function NavBar() {
     <div className="NavBar">
       <nav className="NavBar-nav">
         <ul className="NavBar-ul">
-          <li className="NavBar-li">
+          <li id="nav-logo" className="NavBar-li">
             <Link to={"/Home"}>
               <Image
                 backgroundColor="white"
@@ -219,14 +219,13 @@ export default function NavBar() {
             </Drawer>
           </li>
           <li className="NavBar-li">
-            <Link onClick={logout} className="h2tagNav">
-              Log Out
-            </Link>
-          </li>
-
-          <li className="NavBar-li">
             <Link className="h2tagNav" onClick={profile}>
               My Profile
+            </Link>
+          </li>
+          <li className="NavBar-li">
+            <Link onClick={logout} className="h2tagNav">
+              Log Out
             </Link>
           </li>
         </ul>
