@@ -26,40 +26,39 @@ export default function ProfilePage(props) {
             alt="Profile Picture"
           />
           <div className="InputFormProfile">
-            <div className="UsernameProfile">
-              <h2 style={{ marginTop: "5px" }}>Username:</h2>
+            <div className="user-info-row">
+              <div className="user-field">
+                <h2>Username:</h2>
+              </div>
+              <div className="user-value">
+                <h2>{userData.user.username}</h2>
+              </div>
             </div>
-            <div className="UsernameValueProfile">
-              <h2 style={{ color: "#ffa62b", marginTop: "5px" }}>
-                {userData.user.username}
-              </h2>
+            <div className="user-info-row">
+              <div className="user-field">
+                <h2>First Name:</h2>
+              </div>
+              <div className="user-value">
+                <h2>{userData.user.firstName}</h2>
+              </div>
             </div>
-
-            <div className="FirstNameProfile">
-              <h2 style={{ marginTop: "5px" }}>First Name:</h2>
+            <div className="user-info-row">
+              <div className="user-field">
+                <h2>Last Name:</h2>
+              </div>
+              <div className="user-value">
+                <h2>
+                  {userData.user.lastName}
+                </h2>
+              </div>
             </div>
-            <div className="FirstNameValueProfile">
-              <h2 style={{ color: "#ffa62b", marginTop: "5px" }}>
-                {userData.user.firstName}
-              </h2>
-            </div>
-
-            <div className="LastNameProfile">
-              <h2 style={{ marginTop: "5px" }}>Last Name:</h2>
-            </div>
-            <div className="LastNameValueProfile">
-              <h2 style={{ color: "#ffa62b", marginTop: "5px" }}>
-                {userData.user.lastName}
-              </h2>
-            </div>
-
-            <div className="EmailProfile">
-              <h2 style={{ marginTop: "5px" }}>Email:</h2>
-            </div>
-            <div className="EmailValueProfile">
-              <h2 style={{ color: "#ffa62b", marginTop: "5px" }}>
-                {userData.user.email}
-              </h2>
+            <div className="user-info-row">
+              <div className="user-field">
+                <h2>Email:</h2>
+              </div>
+              <div className="user-value">
+                <h2>{userData.user.email}</h2>
+              </div>
             </div>
           </div>
           <div className="ButtonsProfileDiv">

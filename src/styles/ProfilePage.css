@@ -1,73 +1,42 @@
 .ProfilePage {
+  display: flex;
+  align-items: center;
 }
 
 .ProfileDiv {
-  width: 650px;
-  height: 500px;
+  width: 40%;
   background-color:#16697a;
   border-radius: 30px;
   margin: auto;
-  margin-top: 150px;
+  margin-top: 5%;
   border: 5px solid #242423;
 }
 
 .ProfilePictureDiv {
-  float: left;
-  height: 250px;
   width: 100%;
   margin: auto;
   margin-top: 25px;
   text-align: center;
 }
 
-.UsernameProfile {
-  float: left;
-  width: 25%;
-  margin-left: 25%;
+.user-info-row {
+  display: flex;
+  margin-left: 15px;
 }
 
-.UsernameValueProfile {
-  float: left;
-  width: 25%;
-  margin-right: 25%;
+.user-field {
+  margin: auto;
+  margin-left: 8%;
 }
 
-.EmailProfile {
-  float: left;
-  width: 15%;
-  margin-left: 20%;
-}
-
-.EmailValueProfile {
-  float: left;
-  width: 50%;
-  margin-right: 15%;
-}
-
-.FirstNameProfile {
-  float: left;
-  width: 25%;
-  margin-left: 5%;
-}
-
-.FirstNameValueProfile {
-  float: left;
-  width: 20%;
-}
-
-.LastNameProfile {
-  float: left;
-  width: 25%;
-}
-
-.LastNameValueProfile {
-  float: left;
-  width: 20%;
-  margin-right: 5%;
+.user-value {
+  margin: auto;
+  margin-right: 8%;
+  color: #ffa62b;
 }
 
 .ButtonsProfileDiv {
-  float: left;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 15px;
+  margin-bottom: 25px;
 }
