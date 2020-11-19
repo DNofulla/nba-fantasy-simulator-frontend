@@ -125,6 +125,9 @@ export default function Leaderboard({ type, superType }) {
           padding: 0,
           paddingTop: "5px",
           paddingBottom: "5px",
+          color: "#ede7e3",
+          background: "#16697a",
+          borderRadius: "25px 25px 0 0"
         }}>
         {superType} Leaderboard
       </h1>

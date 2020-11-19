@@ -258,9 +258,8 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
   if (condition === "MY_TOURS") {
     if (tourid === "none") {
       return (
-        <div className="TournamentCard">
-          <div style={{ marginTop: "120px" }}>
-            <div style={{ width: "50%", margin: "auto" }}>
+        <div className="TournamentCard inactive-tour">
+          <div>
               <Button
                 _hover={{ background: "red", color: "white" }}
                 background="red"
@@ -269,7 +268,7 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
                 Create Tournament
               </Button>
             </div>
-            <div style={{ width: "49%", margin: "auto", marginTop: "50px" }}>
+            <div>
               <Button
                 _hover={{ background: "rgb(20, 80, 120)", color: "white" }}
                 background="rgb(20, 80, 120)"
@@ -277,7 +276,6 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
                 onClick={() => history.push("/MyTournaments/JoinTournament")}>
                 Join a Tournament
               </Button>
-            </div>
           </div>
 
           <Modal

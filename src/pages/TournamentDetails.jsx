@@ -119,6 +119,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: "10px 0 0 0",
+                    fontSize: ".9em"
                   }}>
                   My Team
                 </Tab>
@@ -132,6 +133,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: 0,
+                    fontSize: ".9em"
                   }}>
                   Past and Upcoming Matches
                 </Tab>
@@ -145,6 +147,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: "0 10px 0 0",
+                    fontSize: ".9em"
                   }}>
                   Chat and Leaderboard
                 </Tab>

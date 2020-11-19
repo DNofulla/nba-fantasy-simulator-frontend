@@ -53,32 +53,32 @@ export default function PlayerCard({
       </div>
 
       <div className="PlayerDescription">
-        <div style={{ fontSize: "25px", marginBottom: "10px" }}>{name}</div>
+        <div style={{ fontSize: "1.4em", marginBottom: "10px" }}>{name}</div>
 
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {average2Pointers} Two Pointers
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {average3Pointers} Three Pointers
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {averageAssists} Assists
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {averageFreeThrows} Free Throws
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {averageBlocks} Blocks
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {averageRebounds} Rebounds
         </div>
-        <div style={{ fontSize: "20px", marginBottom: "5px" }}>
+        <div style={{ fontSize: "1.1em", marginBottom: "5px" }}>
           {averageSteals} Steals
         </div>
 
         <div
-          style={{ fontSize: "20px", marginBottom: "5px", color: "#82c0cc" }}>
+          style={{ fontSize: "1.1em", marginBottom: "5px", color: "#82c0cc" }}>
           {rankingPoints > 100 ? 100 : rankingPoints} Ranking Points
         </div>
         <Progress
