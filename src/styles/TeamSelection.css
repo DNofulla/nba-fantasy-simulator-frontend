@@ -14,7 +14,7 @@
   float: left;
   height: 50px;
   background-color:#82c0cc;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 .ActionsTeamSelection {
@@ -28,7 +28,7 @@
 
 .SecondaryTabsTeamStats {
   width: 200%;
-  height: 680px;
+  height: 70vh;
   background-color: #489fb5;
   display: flex;
   flex-wrap: wrap;
@@ -38,7 +38,7 @@
 
 .SecondaryTabsRosterSelection {
   width: 200%;
-  height: 680px;
+  height: 70vh;
   background-color: #489fb5;
   display: flex;
   flex-wrap: wrap;
@@ -47,7 +47,7 @@
 
 .SecondaryTabsActivePlayers {
   width: 200%;
-  height: 680px;
+  height: 70vh;
   background-color:#16697a;
   display: flex;
   flex-wrap: wrap;
@@ -66,4 +66,18 @@
   float: left;
   margin-left: 45%;
   margin-top: 300px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .TabsTeamSelection {
+    width: 100%;
+  }
+
+  .SecondaryTabsRosterSelection {
+    width: 100%;
+  }
+
+  .SecondaryTabsTeamStats {
+    width: 100%;
+  }
 }

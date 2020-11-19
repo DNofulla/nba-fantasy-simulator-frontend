@@ -126,6 +126,8 @@ export default function Leaderboard(props) {
           paddingTop: "5px",
           paddingBottom: "5px",
           color: "#ede7e3",
+          background: "#16697a",
+          borderRadius: "25px 25px 0 0"
         }}>
         Leaderboard
       </h1>

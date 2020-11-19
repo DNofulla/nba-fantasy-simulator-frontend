@@ -1,50 +1,53 @@
 .Leaderboard {
-  width: 500px;
-  background-color: #ede7e3;
-  height: 620px;
-  padding-bottom: 75px;
+  margin-top: 0;
+  background-color: #16697a;
   border: 1px solid black;
   border-radius: 25px;
   text-align: center;
-  color: #ede7e3;
+  padding-bottom: 35px;
 }
 
 .innerLeaderboard {
-  width: 500px;
-  height: 600px;
   background-color:#16697a;
   text-align: center;
-  overflow-y: scroll;
+  max-height: 550px;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  overflow-y: scroll;
 }
 
 .LeaderboardTable {
   width: 100%;
-  height: 900px;
   border-collapse: collapse;
   border: 1px solid #ede7e3;
 }
 
 .LeaderboardRow {
   border: 1px solid #ede7e3;
+  color: #ede7e3;
 }
 
 .LeaderboardColumn {
   border: 1px solid #ede7e3;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  color: #ede7e3;
 }
 
 #PositionTag {
   padding: 0;
   margin: 0;
+  color: #ede7e3;
 }
 
 #TeamNameTag {
   padding: 0;
   margin: 0;
+  color: #ede7e3;
 }
 
 #PointsTag {
   padding: 0;
   margin: 0;
+  color: #ede7e3;
 }

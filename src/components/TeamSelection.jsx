@@ -121,19 +121,21 @@ export default function TeamSelection({ setMyTeamRP }) {
     for (let i = 0; i < 5; i++) {
       rosterData.push(getPlayerDataById(data[i]));
       players.push(
-        <PlayerCard
-          name={rosterData[i].name}
-          rankingPoints={rosterData[i].rankingPoints}
-          id={rosterData[i].id}
-          pts2={rosterData[i].pts2}
-          pts3={rosterData[i].pts3}
-          asst={rosterData[i].asst}
-          ft={rosterData[i].ft}
-          b={rosterData[i].b}
-          rb={rosterData[i].rb}
-          st={rosterData[i].st}
-          type="NO"
-        />
+        <div className="player-card">
+          <PlayerCard
+            name={rosterData[i].name}
+            rankingPoints={rosterData[i].rankingPoints}
+            id={rosterData[i].id}
+            pts2={rosterData[i].pts2}
+            pts3={rosterData[i].pts3}
+            asst={rosterData[i].asst}
+            ft={rosterData[i].ft}
+            b={rosterData[i].b}
+            rb={rosterData[i].rb}
+            st={rosterData[i].st}
+            type="NO"
+          />
+        </div>
       );
     }
     return players;

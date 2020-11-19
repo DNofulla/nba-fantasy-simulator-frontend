@@ -6,9 +6,9 @@ import userContext from "../services/userContext";
 import "../styles/Chat.css";
 import moment from "moment";
 
-const socket = io.connect("http://localhost:3001", {
-  transports: ["websocket", "polling"],
-});
+// const socket = io.connect("http://localhost:3001", {
+//   transports: ["websocket", "polling"],
+// });
 
 export default function Chat(props) {
   const { userData, setUserData } = useContext(userContext);
@@ -17,9 +17,9 @@ export default function Chat(props) {
 
   useEffect(() => {
     const name = userData.user.username;
-    socket.on("message", (message) => {
-      setChatMessages((chatMessages) => [...chatMessages, message]);
-    });
+    // socket.on("message", (message) => {
+    //   setChatMessages((chatMessages) => [...chatMessages, message]);
+    // });
   }, []);
 
   console.log(props.class)
@@ -32,7 +32,7 @@ export default function Chat(props) {
       message: message,
     };
     if (message !== "") {
-      socket.emit("send", payload);
+      // socket.emit("send", payload);
       setMessage("");
     }
   };

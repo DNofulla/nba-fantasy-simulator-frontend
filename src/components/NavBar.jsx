@@ -2,12 +2,7 @@ import React, { useContext } from "react";
 import "../styles/NavBar.css";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionHeader,
-  AccordionPanel,
   Avatar,
-  Box,
   Image,
   Button,
   useDisclosure,
@@ -78,7 +73,9 @@ export default function NavBar() {
               isOpen={isOpen}
               placement="right"
               onClose={onClose}
-              finalFocusRef={btnRef}>
+              finalFocusRef={btnRef}
+              zIndex="10"
+              >
               <DrawerOverlay />
               <DrawerContent>
                 <DrawerCloseButton

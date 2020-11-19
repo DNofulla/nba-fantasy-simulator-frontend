@@ -10,7 +10,7 @@ body {
 #home-components {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   margin: auto;
   margin-top: 5%;
 }
@@ -23,25 +23,16 @@ body {
 }
 
 .home-element {
-  margin: none;
+  width: 500px;
   margin: auto;
   flex-shrink: 0;
   margin-bottom: 15px;
-}
-
-.LeagueNews {
-  margin: auto;
-  box-shadow: 0 2px 5px 5px #464646;
-}
-
-.Leaderboard {
-  margin: auto;
-  box-shadow: 0 2px 5px 5px #464646;
-}
-
-#home-chat {
-  margin: auto;
-  width: 550px;
   border-radius: 25px;
   box-shadow: 0 2px 5px 5px #464646;
+  max-height: 660px;
+}
+
+#home-lb {
+  margin-top: 15px;
+  padding-top: 0;
 }

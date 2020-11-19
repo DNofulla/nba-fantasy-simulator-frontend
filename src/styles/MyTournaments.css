@@ -2,16 +2,19 @@
   margin-top: 5%;
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
 }
 
 #GlobalTour {
-  margin-left: auto;
+  margin: auto;
   border-radius: 15px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 15px 5px black;
 }
 
 #FriendsTour {
   margin: auto;
   border-radius: 15px;
+  margin-bottom: 15px;
   box-shadow: 0 2px 15px 5px black;
 }
