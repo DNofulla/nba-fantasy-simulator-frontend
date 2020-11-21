@@ -26,3 +26,9 @@
     text-align: left;
     color: #ffa62b;
   }
+
+  .friend-dash-chat {
+    margin: auto;
+    width: 95%;
+    max-width: 350px;
+  }

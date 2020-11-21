@@ -1,0 +1,79 @@
+#friends-dash {
+    margin: auto;
+    border: none;
+}
+
+.dash-tab {
+    color: black;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    border-right: 1px solid #ede7e3;
+    font-size: .9em;
+}
+
+#tournament-invites {
+    background-color: #16697a;
+    border-radius: 15px;
+    height: 200px;
+}
+
+#friend-requests {
+    background-color: #16697a;
+    min-height: 200px;
+    border-radius: 15px;
+}
+
+.friend-dash-element {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    color: #ffa62b;
+    border-bottom: 1px solid #ffa62b;
+}
+
+.friend-dash-name {
+    margin: auto;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.tournament-name {
+    margin: auto;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.friend-dash-buttons {
+    margin: auto;
+    margin-right: 15px;
+    display: flex;
+}
+
+#dash-panels {
+    padding-bottom: 35px;
+}
+
+.friends-dash-panel {
+    height: 380px;
+    overflow-y: scroll;
+}
+
+@media only screen and (max-width: 400px) {
+    .friend-dash-buttons {
+        margin-right: 0;
+    }
+    
+    .friend-dash-buttons button {
+        width: 50%;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    [class~='friend-dash-element']:last-of-type {
+        border-bottom: none;
+    }
+}

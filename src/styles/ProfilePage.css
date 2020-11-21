@@ -1,6 +1,7 @@
 .ProfilePage {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
   margin-top: 2%;
 }
 
@@ -10,7 +11,6 @@
   background-color:#16697a;
   border-radius: 30px;
   margin: auto;
-  border: 5px solid #242423;
 }
 
 .ProfilePictureDiv {

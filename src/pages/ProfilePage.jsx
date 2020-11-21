@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import NavBar from "../components/NavBar";
+import FriendsDash from "../components/FriendsDash"
 import "../styles/ProfilePage.css";
 import {
   Image,
@@ -95,6 +96,7 @@ export default function ProfilePage(props) {
           </div>
         </div>
       </div>
+      <FriendsDash />
     </div>
   );
 }
