@@ -28,7 +28,7 @@ function enumerateFriends(friends) {
   for (let i = 0; i < friends.length; i++) {
     let friendName = "Chat with " + friends[i].split(" ")[0];
     friendsList.push(
-      <AccordionItem defaultIsOpen="false">
+      <AccordionItem borderBottom="1px solid #ffa62b" defaultIsOpen="false">
         {() => (
           <>
             <AccordionHeader
@@ -50,11 +50,13 @@ function enumerateFriends(friends) {
               <AccordionIcon color="#ffa62b" />
             </AccordionHeader>
             <AccordionPanel>
-              <Chat
-                chatClass="friendChat"
-                icd="innerChatDiv-friend"
-                chatName={friendName}
-              />
+              <div className="friend-dash-chat">
+                <Chat
+                  chatClass="friendChat"
+                  icd="innerChatDiv-friend"
+                  chatName={friendName}
+                />
+              </div>
             </AccordionPanel>
           </>
         )}
