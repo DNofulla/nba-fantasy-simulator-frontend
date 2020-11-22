@@ -19,8 +19,23 @@ import {
   useDisclosure,
 } from "@chakra-ui/core";
 
+import Axios from 'axios';
 import { MdBuild } from "react-icons/md";
 import userContext from "../services/userContext";
+
+var updateEmail, updateFirst, updateLast, updateUserName
+
+async function updateProfile() {
+  const response = await Axios.post(
+    "http://localhost:8080/updateProfile",
+    {
+      username: updateUserName,
+      email: updateEmail,
+      firstName: updateFirst,
+      lastName: updateLast,
+    }
+  );
+}
 
 export default function ProfilePage(props) {
   const { userData } = useContext(userContext);
@@ -91,23 +106,23 @@ export default function ProfilePage(props) {
                   <ModalBody>
                     <div className="edit-profile">
                       <h3>Edit username</h3>
-                      <input type="text"/>
+                      <input type="text" value={userData.user.username}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit First Name</h3>
-                      <input type="text"/>
+                      <input type="text" value={userData.user.firstName}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit Last Name</h3>
-                      <input type="text"/>
+                      <input type="text" value={userData.user.lastName}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit email</h3>
-                      <input type="text"/>
+                      <input type="text" value={userData.user.email}/>
                     </div>
                   </ModalBody>
                   <ModalFooter>
-                    <Button mr={3} onClick={onClose} backgroundColor="#82c0cc" border="none">
+                    <Button mr={3} onClick={updateProfile} backgroundColor="#82c0cc" border="none">
                       Accept Changes
                     </Button>
                     <Button mr={3} onClick={onClose} backgroundColor="#ffa62b" border="none">
