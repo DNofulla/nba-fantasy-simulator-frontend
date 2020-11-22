@@ -9,6 +9,14 @@ import {
   EditableInput,
   Button,
   ButtonGroup,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/core";
 
 import { MdBuild } from "react-icons/md";
@@ -16,6 +24,7 @@ import userContext from "../services/userContext";
 
 export default function ProfilePage(props) {
   const { userData } = useContext(userContext);
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <div className="ProfilePage">
@@ -65,33 +74,48 @@ export default function ProfilePage(props) {
           <div className="ButtonsProfileDiv">
             <div className="profile-button">
               <Button
-                leftIcon="email"
-                color="black"
-                backgroundColor="#82c0cc"
-                variantColor="white"
-                variant="solid">
-                Change Email
-              </Button>
-            </div>
-            <div className="profile-button">
-              <Button
                 leftIcon={MdBuild}
                 color="black"
                 backgroundColor="#82c0cc"
                 variantColor="white"
-                variant="solid">
-                Change Password
+                variant="solid"
+                border="none"
+                onClick={onOpen}>
+                Edit Profile
               </Button>
-            </div>
-            <div className="profile-button">
-              <Button
-                leftIcon={MdBuild}
-                color="black"
-                backgroundColor="#82c0cc"
-                variantColor="white"
-                variant="solid">
-                Change Names
-              </Button>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent id="edit-profile">
+                  <ModalHeader>Edit Profile</ModalHeader>
+                  <ModalCloseButton backgroundColor="#f44" color="white" border="none" _hover={{backgroundColor: "f44"}}/>
+                  <ModalBody>
+                    <div className="edit-profile">
+                      <h3>Edit username</h3>
+                      <input type="text"/>
+                    </div>
+                    <div className="edit-profile">
+                      <h3>Edit First Name</h3>
+                      <input type="text"/>
+                    </div>
+                    <div className="edit-profile">
+                      <h3>Edit Last Name</h3>
+                      <input type="text"/>
+                    </div>
+                    <div className="edit-profile">
+                      <h3>Edit email</h3>
+                      <input type="text"/>
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button mr={3} onClick={onClose} backgroundColor="#82c0cc" border="none">
+                      Accept Changes
+                    </Button>
+                    <Button mr={3} onClick={onClose} backgroundColor="#ffa62b" border="none">
+                      Cancel
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
             </div>
           </div>
         </div>

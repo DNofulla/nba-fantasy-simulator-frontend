@@ -49,6 +49,37 @@
   margin-top: 15px;
 }
 
+#edit-profile {
+  background-color: #16697a;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.edit-profile {
+  display: flex;
+  color: #ede7e3;
+  margin-top: 5px;
+}
+
+#edit-profile header {
+  color: #ffa62b;
+  font-weight: bold;
+}
+
+#edit-profile footer {
+  margin-top: 15px;
+}
+
+.edit-profile h3 {
+  margin: auto;
+  margin-left: 5px;
+}
+
+.edit-profile input {
+  margin: auto;
+  margin-right: 5px;
+}
+
 @media only screen and (max-width: 1500px) {
   .ProfileDiv {
     width: 70%;
