@@ -1,41 +1,6 @@
 import React from "react";
 import "../styles/MatchHistory.css";
 
-const mockMatches = [
-  {
-    title: "Match 1",
-    description: "Team 1 vs Team 2",
-  },
-  {
-    title: "Match 2",
-    description: "Team 3 vs Team 4",
-  },
-  {
-    title: "Match 3",
-    description: "Team 5 vs Team 6",
-  },
-  {
-    title: "Match 4",
-    description: "Team 7 vs Team 8",
-  },
-  {
-    title: "Match 5",
-    description: "Team 9 vs Team 10",
-  },
-  {
-    title: "Match 6",
-    description: "Team 11 vs Team 12",
-  },
-  {
-    title: "Match 7",
-    description: "Team 13 vs Team 14",
-  },
-  {
-    title: "Match 8",
-    description: "Team 15 vs Team 16",
-  },
-];
-
 export default function MatchHistory({ type, bgColor }) {
   return (
     <div className="MatchHistory">

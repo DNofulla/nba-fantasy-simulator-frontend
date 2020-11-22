@@ -12,7 +12,6 @@ import {
   Icon,
 } from "@chakra-ui/core";
 import PlayerCard from "./PlayerCard";
-import { playersAvailable } from "../services/playersAvailable";
 import userContext from "../services/userContext";
 import Axios from "axios";
 import { useHistory } from "react-router";
@@ -86,39 +85,39 @@ export default function TeamSelection({
     let players = [];
     for (let i = 0; i < allPlayers.length; i++) {
       players.push(
-          <PlayerCard
-            onChange={(value) => {
-              if (value.count > 0) {
-                activePlayers.push(value.id);
-                console.log(value.id);
-                setActivePlayersCount(activePlayersCount + 1);
-              } else {
-                const index = activePlayers.indexOf(value.id);
-                activePlayers.splice(index, 1);
-                setActivePlayersCount(activePlayersCount - 1);
-              }
+        <PlayerCard
+          onChange={(value) => {
+            if (value.count > 0) {
+              activePlayers.push(value.id);
+              console.log(value.id);
+              setActivePlayersCount(activePlayersCount + 1);
+            } else {
+              const index = activePlayers.indexOf(value.id);
+              activePlayers.splice(index, 1);
+              setActivePlayersCount(activePlayersCount - 1);
+            }
 
-              setMyTeamRP(playerRankingPoints + value.rp);
-              setPlayerRankingPoints(playerRankingPoints + value.rp);
-              console.log(activePlayersCount);
-              console.log(activePlayers.length);
-              if (activePlayers.length === 5) {
-                setCanLockIn(true);
-              } else {
-                setCanLockIn(false);
-              }
-            }}
-            name={data[i].name}
-            rankingPoints={Math.round((data[i].pts / 992) * 100)}
-            id={data[i].id}
-            pts2={data[i].fgm}
-            pts3={Math.round((data[i].pts - data[i].fgm * 2 - data[i].ftm) / 3)}
-            asst={data[i].ast}
-            ft={data[i].ftm}
-            b={data[i].blk}
-            rb={data[i].dreb + data[i].oreb}
-            st={data[i].stl}
-          />
+            setMyTeamRP(playerRankingPoints + value.rp);
+            setPlayerRankingPoints(playerRankingPoints + value.rp);
+            console.log(activePlayersCount);
+            console.log(activePlayers.length);
+            if (activePlayers.length === 5) {
+              setCanLockIn(true);
+            } else {
+              setCanLockIn(false);
+            }
+          }}
+          name={data[i].name}
+          rankingPoints={Math.round((data[i].pts / 992) * 100)}
+          id={data[i].id}
+          pts2={data[i].fgm}
+          pts3={Math.round((data[i].pts - data[i].fgm * 2 - data[i].ftm) / 3)}
+          asst={data[i].ast}
+          ft={data[i].ftm}
+          b={data[i].blk}
+          rb={data[i].dreb + data[i].oreb}
+          st={data[i].stl}
+        />
       );
     }
     return players;
@@ -171,7 +170,7 @@ export default function TeamSelection({
                   borderRadius: 0,
                   borderLeft: "1px solid #ede7e3",
                   borderRight: "1px solid #ede7e3",
-                  fontSize: ".9em"
+                  fontSize: ".9em",
                 }}>
                 Team Stats
               </Tab>
@@ -186,7 +185,7 @@ export default function TeamSelection({
                   outline: "none",
                   borderRadius: 0,
                   borderRight: "1px solid #ede7e3",
-                  fontSize: ".9em"
+                  fontSize: ".9em",
                 }}>
                 Roster Selection
               </Tab>
@@ -204,7 +203,7 @@ export default function TeamSelection({
                       style={{
                         float: "left",
                         margin: "auto",
-                        fontSize: "1.2em"
+                        fontSize: "1.2em",
                       }}>
                       NO PLAYER DATA / ROSTER NOT LOCKED
                     </h1>

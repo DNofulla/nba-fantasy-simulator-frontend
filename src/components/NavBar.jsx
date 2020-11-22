@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "../styles/NavBar.css";
-import MediaQuery from 'react-responsive';
+import MediaQuery from "react-responsive";
 import { Link, Redirect, useHistory } from "react-router-dom";
 import {
   Accordion,
@@ -33,50 +33,54 @@ export default function NavBar() {
     <div className="NavBar">
       <nav className="NavBar-nav">
         <MediaQuery maxDeviceWidth={599}>
-              <Accordion allowToggle>
-                <AccordionItem defaultIsOpen="false">
-                  <AccordionHeader
-                    border="none"
-                    boxShadow="none !important"
-                    cursor="pointer"
-                    width="100%"
-                    padding="0"
-                    bg="transparent">
-                      <Box id="penguin-wrapper">
-                        <img 
-                          src="https://media.discordapp.net/attachments/747875449937461333/752598704988487696/penguin_gang_logo.png"
-                          alt="NBA PENGUIN"
-                          id="expand-penguin"/>
-                      </Box>
-                  </AccordionHeader>
-                
-                  <AccordionPanel id="penguin-panel">
-                    <ul className="NavBar-ul">
-                      <li className="NavBar-li">
-                        <Link className="h2tagNav" to={"/Home"}>
-                          Home
-                        </Link>
-                      </li>
-                      <li className="NavBar-li">
-                        <Link className="h2tagNav" to={"/MyTournaments"}>
-                          My Tournaments
-                        </Link>
-                      </li>
-                      <li className="NavBar-li">
-                        <Link className="h2tagNav" to={"/Profile"}>
-                          My Profile
-                        </Link>
-                      </li>
-                      <li className="NavBar-li">
-                        <Link className="h2tagNav" id="menu-logout" onClick={logout}>
-                          Log Out
-                        </Link>
-                      </li>
-                    </ul>
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            </MediaQuery>
+          <Accordion allowToggle>
+            <AccordionItem defaultIsOpen="false">
+              <AccordionHeader
+                border="none"
+                boxShadow="none !important"
+                cursor="pointer"
+                width="100%"
+                padding="0"
+                bg="transparent">
+                <Box id="penguin-wrapper">
+                  <img
+                    src="https://media.discordapp.net/attachments/747875449937461333/752598704988487696/penguin_gang_logo.png"
+                    alt="NBA PENGUIN"
+                    id="expand-penguin"
+                  />
+                </Box>
+              </AccordionHeader>
+
+              <AccordionPanel id="penguin-panel">
+                <ul className="NavBar-ul">
+                  <li className="NavBar-li">
+                    <Link className="h2tagNav" to={"/Home"}>
+                      Home
+                    </Link>
+                  </li>
+                  <li className="NavBar-li">
+                    <Link className="h2tagNav" to={"/MyTournaments"}>
+                      My Tournaments
+                    </Link>
+                  </li>
+                  <li className="NavBar-li">
+                    <Link className="h2tagNav" to={"/Profile"}>
+                      My Profile
+                    </Link>
+                  </li>
+                  <li className="NavBar-li">
+                    <Link
+                      className="h2tagNav"
+                      id="menu-logout"
+                      onClick={logout}>
+                      Log Out
+                    </Link>
+                  </li>
+                </ul>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </MediaQuery>
         <MediaQuery minDeviceWidth={600}>
           <ul className="NavBar-ul">
             <li id="nav-logo" className="NavBar-li">
@@ -102,7 +106,6 @@ export default function NavBar() {
               </Link>
             </li>
 
-            
             <li className="NavBar-li">
               <Link className="h2tagNav" onClick={profile}>
                 My Profile

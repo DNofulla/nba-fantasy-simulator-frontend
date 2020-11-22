@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBar"
 import "../styles/TournamentDetails.css";
 import { Tab, TabList, TabPanels, Tabs, TabPanel } from "@chakra-ui/core";
 import TournamentCard from "../components/TournamentCard";

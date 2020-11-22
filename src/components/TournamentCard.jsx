@@ -18,33 +18,44 @@ import {
   ModalHeader,
   ModalCloseButton,
   FormControl,
-  FormLabel,
   Input,
-  Select,
   RadioGroup,
   Radio,
   Stack,
 } from "@chakra-ui/core";
 import { Link, Redirect, useHistory } from "react-router-dom";
-import userContext from "../services/userContext";
 import Axios from "axios";
+import userContext from "../services/userContext";
+import friendListContext from "../services/friendListContext";
+import friendRequestContext from "../services/friendRequestContext";
+import teamContext from "../services/teamContext";
+import tournamentContext from "../services/tournamentContext";
+import tournamentRequestContext from "../services/tournamentRequestContext";
 
 export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
   const { userData, setUserData } = useContext(userContext);
+  const { friendData, setFriendData } = useContext(friendListContext);
+  const { friendRequestData, setFriendRequestData } = useContext(
+    friendRequestContext
+  );
+  const { teamData, setTeamData } = useContext(teamContext);
+  const { tournamentData, setTournamentData } = useContext(tournamentContext);
+  const { tournamentRequestData, setTournamentRequestData } = useContext(
+    tournamentRequestContext
+  );
   const disclosure1 = new useDisclosure();
   const history = useHistory();
 
   const [lockedTeamCount, setLockedTeamCount] = useState(0);
   const [averageTeamRankingPoints, setAverageTeamRankingPoints] = useState(0);
   const [totalMatchCount, setTotalMatchCount] = useState(0);
-
-  // Derived from Calls to Database
   const [matchesRemaining, setMatchesRemaining] = useState([]);
-  const [allMatchData, setAllMatchData] = useState([]);
   const [matchesPlayed, setMatchesPlayed] = useState([]);
-  const [myTeamRankingPoints, setMyTeamRankingPoints] = useState(0);
-  const [teamData, setTeamData] = useState([]);
-  const [tournamentData, setTournamentData] = useState({});
+
+  const [team1Data, setTeam1Data] = useState();
+  const [team2Data, setTeam2Data] = useState();
+  const [tournament1Data, setTournament1Data] = useState();
+  const [tournament2Data, setTournament2Data] = useState();
 
   const [newTourName, setNewTourName] = useState("");
   const [newTourLockedIn, setNewTourLockedIn] = useState(false);
@@ -57,66 +68,64 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
   const [newTourHostUsername, setNewTourHostUsername] = useState(
     userData.user.username
   );
-
   const [publicNew, setPublicNew] = useState(true);
 
+  const [currTournamentData, setCurrTournamentData] = useState({});
+  const [currTeamData, setCurrTeamData] = useState({});
+
   useEffect(() => {
-    if (tourid !== "none" && tourid !== null) {
+    Axios.get("http://localhost:8080/global/action/getUpdatedInfo", {
+      params: {
+        userId: userData.user.id,
+      },
+      headers: {
+        Authorization: "Bearer " + userData.token,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        setUserData({
+          token: userData.token,
+          user: response.data.user,
+        });
+        setFriendData(response.data.friendListUserData);
+        setFriendRequestData(response.data.friendRequestUserData);
+        setTeamData([response.data.team1, response.data.team2]);
+        setTournamentData([
+          response.data.tournament1,
+          response.data.tournament2,
+        ]);
+        setTournamentRequestData(response.data.tournamentRequestData);
+        setTeam1Data(response.data.team1);
+        setTeam2Data(response.data.team2);
+        setTournament1Data(response.data.tournament1);
+        setTournament2Data(response.data.tournament2);
+      })
+      .then((error) => {
+        console.log(error);
+      });
+
+    if (tourid !== "none") {
       Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
         params: {
           tournamentId: tourid,
         },
-        headers: {
-          Authorization: "Bearer " + userData.token,
-        },
       })
         .then((res) => {
+          setCurrTournamentData(res.data);
           console.log(res);
-          setTournamentData(res.data);
-          if (res.data.tournamentId) {
-            setTotalMatchCount(2 * tournamentData.registeredTeamId.length);
-            setLockedTeamCount(tournamentData.registeredTeamId.length);
-          }
         })
-        .then((err) => {});
-
-      Axios.get("http://localhost:8080/team", {
-        headers: {
-          Authorization: "Bearer " + userData.token,
-        },
-      })
-        .then((res) => {
-          console.log(res.data);
-          setTeamData(res.data);
-        })
-        .then((err) => {});
-
-      Axios.get("http://localhost:8080/match/tournament/" + tourid, {
-        headers: {
-          Authorization: "Bearer " + userData.token,
-        },
-      })
-        .then((response) => {
-          console.log(response);
-          if (response.data.length === 0) {
-            setMatchesPlayed([]);
-            setMatchesRemaining([]);
-          } else {
-            for (let i = 0; i < response.data.length; i++) {
-              if (response.data[i].isPlayed) {
-                setMatchesPlayed([...matchesPlayed, response.data[i]]);
-              } else {
-                setMatchesRemaining([...matchesRemaining, response.data[i]]);
-              }
-              setAllMatchData([...allMatchData, response.data[i]]);
-            }
-          }
-        })
-        .then((error) => {});
+        .then((err) => {
+          console.log(err);
+        });
     }
   }, []);
 
-  const createTournament = async () => {
+  const createTournament = (e) => {
+    e.preventDefault();
     var result = "";
     var characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -132,57 +141,28 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
     };
 
     try {
-      const res = await Axios.post(
-        "http://localhost:8080/tournaments",
+      const registeredUserIdVals = [];
+      registeredUserIdVals.push(userData.user.id);
+      Axios.post(
+        "http://localhost:8080/global/action/createTournament",
         {
           id: result,
           hostUserId: userData.user.id,
           hostUsername: userData.user.username,
           lockedInStatus: newTourLockedIn,
           publicStatus: publicNew,
+          activeStatus: true,
           tournamentName: newTourName,
           registeredTeamId: [],
+          registeredUserId: registeredUserIdVals,
           participantLimit: 16,
+          upcomingMatchIds: [],
+          completedMatchIds: [],
         },
         options
-      );
-
-      console.log(userData.user);
-      if (type === "tour1") {
-        if (res.status === 200) {
-          console.log(userData.user.username);
-
-          Axios.post(
-            "http://localhost:8080/userInfo/update/" + userData.user.id,
-            {
-              id: userData.user.id,
-              username: userData.user.username,
-              password: userData.user.password,
-              email: userData.user.email,
-              firstName: userData.user.firstName,
-              lastName: userData.user.lastName,
-              friendIDs: userData.user.friendIDs,
-              announcementIDs: userData.user.announcementIDs,
-              accountPoints: userData.user.accountPoints,
-              team1Id: userData.user.team1Id,
-              team2Id: userData.user.team2Id,
-              tournament1Id: result,
-              tournament2Id: userData.user.tournament2Id,
-              matchIDs: userData.user.matchIDs,
-            },
-            {
-              headers: {
-                Authorization: "Bearer " + userData.token,
-              },
-            }
-          )
-            .then((res) => {
-              console.log(res.data.username);
-            })
-            .then((err) => {
-              console.log(err);
-            });
-        }
+      ).then((res) => {
+        console.log(res.data);
+        setNewTourName("");
         setTimeout(() => {
           setTimeout(() => {
             history.push("/Home");
@@ -197,59 +177,7 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
             });
           });
         }, 50);
-      } else {
-        if (res.status === 200) {
-          console.log(userData.user.username);
-
-          Axios.post(
-            "http://localhost:8080/userInfo/update/" + userData.user.id,
-            {
-              id: userData.user.id,
-              username: userData.user.username,
-              password: userData.user.password,
-              email: userData.user.email,
-              firstName: userData.user.firstName,
-              lastName: userData.user.lastName,
-              friendIDs: userData.user.friendIDs,
-              announcementIDs: userData.user.announcementIDs,
-              accountPoints: userData.user.accountPoints,
-              team1Id: userData.user.team1Id,
-              team2Id: userData.user.team2Id,
-              tournament1Id: userData.user.tournament1Id,
-              tournament2Id: result,
-              matchIDs: userData.user.matchIDs,
-            },
-            {
-              headers: {
-                Authorization: "Bearer " + userData.token,
-              },
-            }
-          )
-            .then((res) => {
-              console.log(res.data);
-            })
-            .then((err) => {
-              console.log(err);
-            });
-        }
-        setTimeout(() => {
-          setTimeout(() => {
-            history.push("/Home");
-            setTimeout(() => {
-              history.push("/MyTournaments");
-              setTimeout(() => {
-                history.push("/Home");
-                setTimeout(() => {
-                  history.push("/MyTournaments/");
-                }, 50);
-              }, 50);
-            });
-          });
-        }, 50);
-      }
-      setNewTourName("");
-      setTournamentData(res.data);
-      console.log(userData.user);
+      });
     } catch (err) {
       console.log(err);
     }
@@ -260,22 +188,22 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
       return (
         <div className="TournamentCard inactive-tour">
           <div>
-              <Button
-                _hover={{ background: "red", color: "white" }}
-                background="red"
-                color="white"
-                onClick={disclosure1.onOpen}>
-                Create Tournament
-              </Button>
-            </div>
-            <div>
-              <Button
-                _hover={{ background: "rgb(20, 80, 120)", color: "white" }}
-                background="rgb(20, 80, 120)"
-                color="white"
-                onClick={() => history.push("/MyTournaments/JoinTournament")}>
-                Join a Tournament
-              </Button>
+            <Button
+              _hover={{ background: "red", color: "white" }}
+              background="red"
+              color="white"
+              onClick={disclosure1.onOpen}>
+              Create Tournament
+            </Button>
+          </div>
+          <div>
+            <Button
+              _hover={{ background: "rgb(20, 80, 120)", color: "white" }}
+              background="rgb(20, 80, 120)"
+              color="white"
+              onClick={() => history.push("/MyTournaments/JoinTournament")}>
+              Join a Tournament
+            </Button>
           </div>
 
           <Modal
@@ -391,23 +319,27 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
             />
           </div>
           <div className="TournamentCardDetails">
-            <div id="TournamentCardName">{tournamentData.tournamentName}</div>
+            <div id="TournamentCardName">
+              {currTournamentData.tournamentName}
+            </div>
             <div id="TournamentCardActive">Public Status:</div>
             <div id="TCardActiveValue">
-              {tournamentData.publicStatus === true ? "Public" : "Invite Only"}
+              {currTournamentData.publicStatus === true
+                ? "Public"
+                : "Invite Only"}
             </div>
             <div id="TournamentCardLocked">Locked In Status:</div>
-            <div id="TCardLockedValue">{`${tournamentData.lockedInStatus}`}</div>
+            <div id="TCardLockedValue">{`${currTournamentData.lockedInStatus}`}</div>
             <div id="TCardHostName">Host: </div>
-            <div id="TCardHostNameValue">{tournamentData.hostUsername}</div>
+            <div id="TCardHostNameValue">{currTournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>
-            <div id="TCardIDValue">#{tournamentData.id}</div>
+            <div id="TCardIDValue">#{currTournamentData.id}</div>
           </div>
 
           <div className="ViewTournamentButtonDiv">
             <Link
               to={{
-                pathname: `/TournamentDetails/${tourid}/${type}`,
+                pathname: `/TournamentDetails/${tourid}`,
               }}>
               <Button
                 _focus={{ outline: "none", border: "none" }}
@@ -437,21 +369,25 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
             />
           </div>
           <div className="TournamentCardDetails">
-            <div id="TournamentCardName">{tournamentData.tournamentName}</div>
+            <div id="TournamentCardName">
+              {currTournamentData.tournamentName}
+            </div>
             <div id="TournamentCardActive">Public Status:</div>
             <div id="TCardActiveValue">
-              {tournamentData.publicStatus === true ? "Public" : "Invite Only"}
+              {currTournamentData.publicStatus === true
+                ? "Public"
+                : "Invite Only"}
             </div>
             <div id="TournamentCardLocked">Locked In Status:</div>
             <div id="TCardLockedValue">
-              {tournamentData.lockedInStatus === true
+              {currTournamentData.lockedInStatus === true
                 ? "Locked In"
                 : "Unlocked"}
             </div>
             <div id="TCardHostName">Host: </div>
-            <div id="TCardHostNameValue">{tournamentData.hostUsername}</div>
+            <div id="TCardHostNameValue">{currTournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>
-            <div id="TCardIDValue">#{tournamentData.id}</div>
+            <div id="TCardIDValue">#{currTournamentData.id}</div>
           </div>
           <div className="StatsTourCard">
             <div className="more-info">

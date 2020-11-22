@@ -6,11 +6,14 @@ import ProfilePage from "./pages/ProfilePage";
 import TournamentDetails from "./pages/TournamentDetails";
 import LoginRegister from "./components/LoginRegister";
 import HomePage from "./pages/HomePage";
-import { useEffect } from "react";
-import Axios from "axios";
 import NavBar from "./components/NavBar";
 import userContext from "./services/userContext";
 import JoinTournament from "./pages/JoinTournament";
+import friendListContext from "./services/friendListContext";
+import friendRequestContext from "./services/friendRequestContext";
+import teamContext from "./services/teamContext";
+import tournamentContext from "./services/tournamentContext";
+import tournamentRequestContext from "./services/tournamentRequestContext";
 
 export default function App() {
   const [userData, setUserData] = useState({
@@ -18,61 +21,55 @@ export default function App() {
     user: undefined,
   });
 
-  useEffect(() => {
-    const validateJWT = async () => {
-      let jwtToken = localStorage.getItem("auth-token");
-      if (jwtToken === null) {
-        jwtToken = "";
-        localStorage.setItem("auth-token", "");
-      }
-
-      const res = await Axios.post("http://localhost:8080/validToken", null, {
-        headers: {
-          "x-auth-token": jwtToken,
-        },
-      });
-      if (res.data) {
-        const response = await Axios.get("http://localhost:8080/user", {
-          headers: {
-            "x-auth-token": jwtToken,
-          },
-        });
-        setUserData({
-          jwtToken,
-          user: response.data,
-        });
-      }
-    };
-    validateJWT();
-  }, []);
+  const [friendData, setFriendData] = useState([]);
+  const [friendRequestData, setFriendRequestData] = useState([]);
+  const [teamData, setTeamData] = useState([]);
+  const [tournamentData, setTournamentData] = useState([]);
+  const [tournamentRequestData, setTournamentRequestData] = useState([]);
 
   return (
     <div className="App">
       <Router>
         <userContext.Provider value={{ userData, setUserData }}>
-          <NavBar />
-          <Switch>
-            <Route path="/" exact component={LoginRegister} />
-            <Route path="/Home" exact component={HomePage} />
-            <Route path="/MyTournaments" exact component={MyTournaments} />
-            <Route path="/Profile" exact component={ProfilePage} />
-            <Route
-              path="/TournamentDetails/:tourid/:type"
-              exact
-              render={(props) => (
-                <TournamentDetails
-                  {...props}
-                  tourIdProp={props.match.params.tourid}
-                  type={props.match.params.type}
-                />
-              )}
-            />
-            <Route
-              path="/MyTournaments/JoinTournament"
-              exact
-              component={JoinTournament}
-            />
-          </Switch>
+          <friendListContext.Provider value={{ friendData, setFriendData }}>
+            <friendRequestContext.Provider
+              value={{ friendRequestData, setFriendRequestData }}>
+              <teamContext.Provider value={{ teamData, setTeamData }}>
+                <tournamentContext.Provider
+                  value={{ tournamentData, setTournamentData }}>
+                  <tournamentRequestContext.Provider
+                    value={{ tournamentRequestData, setTournamentRequestData }}>
+                    <NavBar />
+                    <Switch>
+                      <Route path="/" exact component={LoginRegister} />
+                      <Route path="/Home" exact component={HomePage} />
+                      <Route
+                        path="/MyTournaments"
+                        exact
+                        component={MyTournaments}
+                      />
+                      <Route path="/Profile" exact component={ProfilePage} />
+                      <Route
+                        path="/TournamentDetails/:tourid"
+                        exact
+                        render={(props) => (
+                          <TournamentDetails
+                            {...props}
+                            tourIdProp={props.match.params.tourid}
+                          />
+                        )}
+                      />
+                      <Route
+                        path="/MyTournaments/JoinTournament"
+                        exact
+                        component={JoinTournament}
+                      />
+                    </Switch>
+                  </tournamentRequestContext.Provider>
+                </tournamentContext.Provider>
+              </teamContext.Provider>
+            </friendRequestContext.Provider>
+          </friendListContext.Provider>
         </userContext.Provider>
       </Router>
     </div>

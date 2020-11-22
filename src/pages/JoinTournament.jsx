@@ -15,10 +15,12 @@ export default function JoinTournament() {
   const history = useHistory();
 
   useEffect(() => {
-    Axios.get("/getAllPublicTournamentData")
+    Axios.get(
+      "localhost://localhost:8080/global/action/getPublicTournamentList"
+    )
       .then((res) => {
         console.log(res);
-        setTournamentData(res.data.tournamentIDs);
+        
       })
       .then((err) => {
         console.log(err);
@@ -28,11 +30,6 @@ export default function JoinTournament() {
   const JoinTournament = async (e, index) => {
     e.preventDefault();
     let type;
-    if (currentTourSlot === "slot1") {
-      type = "tour1";
-    } else {
-      type = "tour2";
-    }
 
     setCurrentTournamentId(tournamentData[index].tournamentId);
 

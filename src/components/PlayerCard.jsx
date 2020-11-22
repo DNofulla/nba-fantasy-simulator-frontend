@@ -35,10 +35,6 @@ export default function PlayerCard({
     setAverageSteals(st);
   }, []);
 
-  function changeCheckedState(value) {
-    setIsChecked(!value);
-  }
-
   return (
     <div className="PlayerCard">
       <div className="PlayerImage">

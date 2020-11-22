@@ -63,7 +63,7 @@
 .ifLockedInButton {
   float: left;
   margin-left: 45%;
-  margin-top: 300px;
+  
 }
 
 @media only screen and (max-width: 1000px) {

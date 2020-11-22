@@ -1,4 +1,4 @@
-import { FormControl, Input, Button, Box } from "@chakra-ui/core";
+import { FormControl, Input, Button } from "@chakra-ui/core";
 import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
@@ -28,9 +28,7 @@ export default function Chat(props) {
         setChatMessages((chatMessages) => [...chatMessages, message]);
       }
     });
-  },
-  []);
-
+  }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -41,25 +39,23 @@ export default function Chat(props) {
     };
     if (message !== "") {
       if (props.recipient) {
-        payload.sender = userData.user.username
-        payload.receiver = props.recipient
+        payload.sender = userData.user.username;
+        payload.receiver = props.recipient;
         socket.emit("send dm", payload);
         setMessage("");
-      }
-      else if (props.tournamentID) {
-        payload.tournamentID = props.tournamentID
+      } else if (props.tournamentID) {
+        payload.tournamentID = props.tournamentID;
         socket.emit("send tour", payload);
         setMessage("");
-      }
-      else {
+      } else {
         socket.emit("send", payload);
         setMessage("");
       }
     }
   };
 
-  var chatClass = (!props.chatClass) ? "ChatBox" : "ChatBox " + props.chatClass;
-  var icd = (!props.icd) ? "InnerChatDiv" : "InnerChatDiv " + props.icd;
+  var chatClass = !props.chatClass ? "ChatBox" : "ChatBox " + props.chatClass;
+  var icd = !props.icd ? "InnerChatDiv" : "InnerChatDiv " + props.icd;
 
   return (
     <div className={chatClass}>

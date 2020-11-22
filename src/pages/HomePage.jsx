@@ -1,5 +1,4 @@
-import React from "react";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useContext } from "react";
 import "../styles/Homepage.css";
 import LeagueNews from "../components/LeagueNews";
 import Chat from "../components/Chat";

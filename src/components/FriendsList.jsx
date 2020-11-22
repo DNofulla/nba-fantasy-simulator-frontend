@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import "../styles/FriendsList.css";
-import { Link, Redirect, useHistory } from "react-router-dom";
 import {
   Accordion,
   AccordionIcon,
@@ -18,38 +17,38 @@ var testFriends = [
     userID: 1,
     userName: "dnofulla",
     firstName: "Daniel",
-    lastName: "Nofulla"
+    lastName: "Nofulla",
   },
   {
     userID: 2,
     userName: "rkim",
     firstName: "Robin",
-    lastName: "Kim"
+    lastName: "Kim",
   },
   {
     userID: 3,
     userName: "akisiel",
     firstName: "Alex",
-    lastName: "Kisiel"
+    lastName: "Kisiel",
   },
   {
     userID: 4,
     userName: "skhan",
     firstName: "Sajjad",
-    lastName: "Khan"
+    lastName: "Khan",
   },
   {
     userID: 5,
     userName: "djames",
     firstName: "Daren",
-    lastName: "James"
+    lastName: "James",
   },
   {
     userID: 6,
     userName: "nkuruvalla",
     firstName: "Neethu",
-    lastName: "Kuruvalla"
-  }
+    lastName: "Kuruvalla",
+  },
 ];
 
 function enumerateFriends(friends) {

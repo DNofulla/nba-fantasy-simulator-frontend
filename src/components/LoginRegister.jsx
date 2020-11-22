@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "../styles/LoginRegister.css";
 import {
   Tabs,
@@ -13,14 +13,14 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/core";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Axios from "axios";
 import userContext from "../services/userContext";
 
-export default function LoginRegister(props) {
+export default function LoginRegister() {
   const toast = useToast();
   const history = useHistory();
-  const { setUserData } = useContext(userContext);
+  const { userData, setUserData } = useContext(userContext);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -36,7 +36,7 @@ export default function LoginRegister(props) {
   const [error4, setError4] = useState();
   const [check, setCheck] = useState(false);
 
-  const loginAuthAttempt = async (e) => {
+  const loginAuthAttempt = (e) => {
     e.preventDefault();
 
     try {
@@ -47,39 +47,38 @@ export default function LoginRegister(props) {
 
       console.log(userLoginInfo);
 
-      const res = await Axios.post("http://localhost:8080/login/signin", null, {
+      Axios.post("http://localhost:8080/login/signin", null, {
         params: userLoginInfo,
+      }).then((res) => {
+        console.log(res.data);
+
+        if (res.status === 200 && !res.data.error) {
+          toast({
+            title: "Logged In!",
+            description: "Authentication Successful!",
+            status: "success",
+            duration: 2000,
+            isClosable: false,
+          });
+          setUserData({
+            token: res.data.JWTToken,
+            user: res.data.user,
+          });
+          localStorage.setItem("auth-token", res.data.JWTToken);
+
+          history.push("/Home");
+        } else {
+          toast({
+            title: "Invalid Credentials!",
+            description: res.data.error,
+            status: "error",
+            duration: 2000,
+            isClosable: false,
+          });
+          setLoginEmail("");
+          setLoginPassword("");
+        }
       });
-
-      console.log(res.data);
-
-      if (res.status === 200 && !res.data.error) {
-        toast({
-          title: "Logged In!",
-          description: "Authentication Successful!",
-          status: "success",
-          duration: 2000,
-          isClosable: false,
-        });
-        setUserData({
-          token: res.data.JWTToken,
-          user: res.data.user,
-        });
-        localStorage.setItem("auth-token", res.data.JWTToken);
-        history.push("/Home");
-      } else {
-        toast({
-          title: "Invalid Credentials!",
-          description: res.data.error,
-          status: "error",
-          duration: 2000,
-          isClosable: false,
-        });
-        setLoginEmail("");
-        setLoginPassword("");
-      }
-
-      console.log(res);
     } catch (err) {
       console.log(err);
     }
