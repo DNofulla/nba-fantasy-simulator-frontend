@@ -18,7 +18,19 @@ export default function Chat(props) {
     socket.on("message", (message) => {
       setChatMessages((chatMessages) => [...chatMessages, message]);
     });
-  }, []);
+    socket.on("dm message", (message) => {
+      if (message.receiver === props.recipient) {
+        setChatMessages((chatMessages) => [...chatMessages, message]);
+      }
+    });
+    socket.on("tour message", (message) => {
+      if (message.tournamentID === props.tournamentID) {
+        setChatMessages((chatMessages) => [...chatMessages, message]);
+      }
+    });
+  },
+  []);
+
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -28,17 +40,33 @@ export default function Chat(props) {
       message: message,
     };
     if (message !== "") {
-      socket.emit("send", payload);
-      setMessage("");
+      if (props.recipient) {
+        payload.sender = userData.user.username
+        payload.receiver = props.recipient
+        socket.emit("send dm", payload);
+        setMessage("");
+      }
+      else if (props.tournamentID) {
+        payload.tournamentID = props.tournamentID
+        socket.emit("send tour", payload);
+        setMessage("");
+      }
+      else {
+        socket.emit("send", payload);
+        setMessage("");
+      }
     }
   };
 
+  var chatClass = (!props.chatClass) ? "ChatBox" : "ChatBox " + props.chatClass;
+  var icd = (!props.icd) ? "InnerChatDiv" : "InnerChatDiv " + props.icd;
+
   return (
-    <div className="ChatBox">
+    <div className={chatClass}>
       <div className="ChatTitleSection">
         <h1 id="chatName">{props.chatName}</h1>
       </div>
-      <div className="InnerChatDiv" style={{ color: "black" }}>
+      <div className={icd} style={{ color: "black" }}>
         {chatMessages.map((data, index) => (
           <div className="messageBoxWrapper" key={index}>
             <div className="usernameChatDivMessage">{data.user}</div>

@@ -1,5 +1,6 @@
 #friends-dash {
     margin: auto;
+    margin-top: 2%;
     border: none;
 }
 
@@ -64,6 +65,7 @@
 @media only screen and (max-width: 400px) {
     .friend-dash-buttons {
         margin-right: 0;
+        width: 40%;
     }
     
     .friend-dash-buttons button {
@@ -71,6 +73,10 @@
         height: 100%;
         margin: 0;
         border-radius: 0;
+    }
+
+    .friend-dash-name {
+        margin-left: 5px;
     }
 
     [class~='friend-dash-element']:last-of-type {

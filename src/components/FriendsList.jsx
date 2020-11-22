@@ -14,19 +14,49 @@ import userContext from "../services/userContext";
 import Chat from "./Chat";
 
 var testFriends = [
-  "Daniel Nofulla",
-  "Robin Kim",
-  "Alex Kisiel",
-  "Daren James",
-  "Sajjad Khan",
-  "Neethu Kuruvalla",
+  {
+    userID: 1,
+    userName: "dnofulla",
+    firstName: "Daniel",
+    lastName: "Nofulla"
+  },
+  {
+    userID: 2,
+    userName: "rkim",
+    firstName: "Robin",
+    lastName: "Kim"
+  },
+  {
+    userID: 3,
+    userName: "akisiel",
+    firstName: "Alex",
+    lastName: "Kisiel"
+  },
+  {
+    userID: 4,
+    userName: "skhan",
+    firstName: "Sajjad",
+    lastName: "Khan"
+  },
+  {
+    userID: 5,
+    userName: "djames",
+    firstName: "Daren",
+    lastName: "James"
+  },
+  {
+    userID: 6,
+    userName: "nkuruvalla",
+    firstName: "Neethu",
+    lastName: "Kuruvalla"
+  }
 ];
 
 function enumerateFriends(friends) {
   var friendsList = [];
 
-  for (let i = 0; i < friends.length; i++) {
-    let friendName = "Chat with " + friends[i].split(" ")[0];
+  for (let friend of friends) {
+    let friendName = "Chat with " + friend.firstName;
     friendsList.push(
       <AccordionItem borderBottom="1px solid #ffa62b" defaultIsOpen="false">
         {() => (
@@ -44,7 +74,7 @@ function enumerateFriends(friends) {
                   <div className="friendTabAvatar">
                     <Avatar src="https://cdn.discordapp.com/attachments/747957440733249656/776683703317299240/72948731.jpg" />
                   </div>
-                  <div className="currentFriendName">{friends[i]}</div>
+                  <div className="currentFriendName">{friend.userName}</div>
                 </div>
               </Box>
               <AccordionIcon color="#ffa62b" />
@@ -55,6 +85,7 @@ function enumerateFriends(friends) {
                   chatClass="friendChat"
                   icd="innerChatDiv-friend"
                   chatName={friendName}
+                  recipient={friend.userName}
                 />
               </div>
             </AccordionPanel>

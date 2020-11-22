@@ -174,8 +174,7 @@ export default function TournamentDetails(props) {
                   <div id="TourDetailsPanel3">
                     <div id="tour-chat">
                       <Chat
-                        chatClass="ChatBox"
-                        icd="InnerChatDiv"
+                        tournamentID={props.tourIdProp}
                         chatName="Tournament Chat"
                       />
                     </div>
