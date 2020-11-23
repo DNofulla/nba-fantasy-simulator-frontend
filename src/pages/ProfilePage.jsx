@@ -27,7 +27,7 @@ var updateEmail, updateFirst, updateLast, updateUserName
 
 async function updateProfile() {
   const response = await Axios.post(
-    "http://localhost:8080/updateProfile",
+    "http://localhost:8080/update/",
     {
       username: updateUserName,
       email: updateEmail,
@@ -106,19 +106,19 @@ export default function ProfilePage(props) {
                   <ModalBody>
                     <div className="edit-profile">
                       <h3>Edit username</h3>
-                      <input type="text" value={userData.user.username}/>
+                      <input type="text" placeholder={userData.user.username} onChange={(e) => {updateUserName = e.target.value;}}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit First Name</h3>
-                      <input type="text" value={userData.user.firstName}/>
+                      <input type="text" placeholder={userData.user.firstName} onChange={(e) => {updateFirst = e.target.value;}}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit Last Name</h3>
-                      <input type="text" value={userData.user.lastName}/>
+                      <input type="text" placeholder={userData.user.lastName} onChange={(e) => {updateLast = e.target.value;}}/>
                     </div>
                     <div className="edit-profile">
                       <h3>Edit email</h3>
-                      <input type="text" value={userData.user.email}/>
+                      <input type="text" placeholder={userData.user.email} onChange={(e) => {updateEmail = e.target.value;}}/>
                     </div>
                   </ModalBody>
                   <ModalFooter>
