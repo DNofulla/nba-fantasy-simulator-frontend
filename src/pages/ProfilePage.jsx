@@ -22,26 +22,46 @@ import {
 import Axios from 'axios';
 import { MdBuild } from "react-icons/md";
 import userContext from "../services/userContext";
+import { ThemeContext } from "@emotion/react";
 
-var updateEmail, updateFirst, updateLast, updateUserName;
+var updateFirst, updateLast, updateUserName;
 
-async function updateProfile() {
+async function updateProfile(userData) {
+  console.log("hello world");
+  console.log(userData.user.id);
   const response = await Axios.post(
-    "http://localhost:8080/update/",
+    "http://localhost:8080/userInfo/update/" + userData.user.id,
     {
       username: updateUserName,
-      email: updateEmail,
-      firstName: updateFirst,
-      lastName: updateLast,
-    }
-  );
+        firstName: updateFirst,
+        lastName: updateLast,
+        team2Id: userData.user.team2Id,
+        tournamentRequestIDs: userData.user.tournamentRequestIDs,
+        friendRequestIDs: userData.user.friendRequestIDs,
+        friendIDs: userData.user.friendIDs,
+        announcementIDs: userData.user.announcementIDs,
+        tournament2Id: userData.user.tournament2Id,
+        team1Id: userData.user.team1Id,
+        accountPoints: userData.user.accountPoints,
+        email: userData.user.email,
+        tournament1Id: userData.user.tournament1Id
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + userData.token,
+      },
+    },
+    
+  ).then((res) => {
+    console.log(res);
+  }).catch((err)=> console.log(err));
 }
 
 export default function ProfilePage(props) {
   const { userData } = useContext(userContext);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  updateEmail = userData.user.email;
+  
   updateFirst = userData.user.firstName;
   updateLast = userData.user.lastName;
   updateUserName = userData.user.username;
@@ -121,13 +141,13 @@ export default function ProfilePage(props) {
                       <h3>Edit Last Name</h3>
                       <input type="text" placeholder={userData.user.lastName} onChange={(e) => {updateLast = e.target.value;}}/>
                     </div>
-                    <div className="edit-profile">
+                    {/* <div className="edit-profile">
                       <h3>Edit email</h3>
-                      <input type="text" placeholder={userData.user.email} onChange={(e) => {updateEmail = e.target.value;}}/>
-                    </div>
+                      <input type="text" onChange={(e) => {updateEmail = e.target.value;}}/>
+                    </div> */}
                   </ModalBody>
                   <ModalFooter>
-                    <Button mr={3} onClick={updateProfile} backgroundColor="#82c0cc" border="none">
+                    <Button mr={3} onClick={updateProfile(userData)} backgroundColor="#82c0cc" border="none">
                       Accept Changes
                     </Button>
                     <Button mr={3} onClick={onClose} backgroundColor="#ffa62b" border="none">
