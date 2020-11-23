@@ -1,6 +1,6 @@
 .TeamSelection {
   width: 100%;
-  height: 100%;
+  height: 700px;
   display: flex;
 }
 
@@ -13,7 +13,7 @@
   width: 50%;
   float: left;
   height: 50px;
-  background-color:#82c0cc;
+  background-color: #82c0cc;
   margin-top: 4px;
 }
 
@@ -46,7 +46,7 @@
 .SecondaryTabsActivePlayers {
   width: 200%;
   height: 70vh;
-  background-color:#16697a;
+  background-color: #16697a;
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
@@ -63,7 +63,6 @@
 .ifLockedInButton {
   float: left;
   margin-left: 45%;
-  
 }
 
 @media only screen and (max-width: 1000px) {
@@ -78,4 +77,4 @@
   .SecondaryTabsTeamStats {
     width: 100%;
   }
-} 
+}

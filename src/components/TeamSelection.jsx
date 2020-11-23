@@ -33,7 +33,6 @@ export default function TeamSelection({
   const [allPlayers, setAllPlayers] = useState([]);
   const [lockedInPlayers, setLockedInPlayers] = useState([]);
 
-  const [rosterPlayers, setRosterPlayers] = useState([]);
   const [activePlayers, setActivePlayers] = useState([]);
 
   const { userData, setUserData } = useContext(userContext);
@@ -86,29 +85,10 @@ export default function TeamSelection({
     for (let i = 0; i < allPlayers.length; i++) {
       players.push(
         <PlayerCard
-          onChange={(value) => {
-            if (value.count > 0) {
-              activePlayers.push(value.id);
-              console.log(value.id);
-              setActivePlayersCount(activePlayersCount + 1);
-            } else {
-              const index = activePlayers.indexOf(value.id);
-              activePlayers.splice(index, 1);
-              setActivePlayersCount(activePlayersCount - 1);
-            }
-
-            setMyTeamRP(playerRankingPoints + value.rp);
-            setPlayerRankingPoints(playerRankingPoints + value.rp);
-            console.log(activePlayersCount);
-            console.log(activePlayers.length);
-            if (activePlayers.length === 5) {
-              setCanLockIn(true);
-            } else {
-              setCanLockIn(false);
-            }
-          }}
+          activePlayers={activePlayers}
+          setActivePlayers={setActivePlayers}
           name={data[i].name}
-          rankingPoints={Math.round((data[i].pts / 992) * 100)}
+          rankingPoints={parseInt(data[i].rp)}
           id={data[i].id}
           pts2={data[i].fgm}
           pts3={Math.round((data[i].pts - data[i].fgm * 2 - data[i].ftm) / 3)}
@@ -117,6 +97,19 @@ export default function TeamSelection({
           b={data[i].blk}
           rb={data[i].dreb + data[i].oreb}
           st={data[i].stl}
+          onChange={({ id, name, rp, type }) => {
+            if (type === "INCREASE") {
+              setActivePlayers([...activePlayers, id]);
+              setPlayerRankingPoints(playerRankingPoints - rp);
+              setMyTeamRP(playerRankingPoints - rp);
+            } else {
+              const index = activePlayers.indexOf(id);
+              activePlayers.splice(index, 1);
+              setPlayerRankingPoints(playerRankingPoints + rp);
+              setMyTeamRP(playerRankingPoints + rp);
+            }
+            console.log(activePlayers);
+          }}
         />
       );
     }
@@ -241,96 +234,62 @@ export default function TeamSelection({
                 marginTop="5px"
                 variantColor="blue"
                 onClick={() => {
-                  var result = "";
-                  var characters =
-                    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                  var charactersLength = characters.length;
-                  for (var i = 0; i < 14; i++) {
-                    result += characters.charAt(
-                      Math.floor(Math.random() * charactersLength)
-                    );
-                  }
-                  Axios.post(
-                    "http://localhost:8080/team/createTeam",
-                    {
-                      id: result,
-                      userId: userData.user.id,
-                      playerIdList: activePlayers,
-                      power: myTeamRP,
-                      totalPoints: 0,
-                      tourId: tournamentData.id,
-                    },
-                    {
-                      headers: {
-                        Authorization: "Bearer " + userData.token,
-                      },
+                  if (activePlayers.length === 0 && myTeamRP <= 400) {
+                    var result = "";
+                    var characters =
+                      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    var charactersLength = characters.length;
+                    for (var i = 0; i < 14; i++) {
+                      result += characters.charAt(
+                        Math.floor(Math.random() * charactersLength)
+                      );
                     }
-                  )
-                    .then((res) => {
-                      console.log(res.data);
-
-                      Axios.post(
-                        "http://localhost:8080/userInfo/update/" +
-                          userData.user.id,
-                        {
-                          id: userData.user.id,
-                          username: userData.user.username,
-                          password: userData.user.password,
-                          email: userData.user.email,
-                          firstName: userData.user.firstName,
-                          lastName: userData.user.lastName,
-                          friendIDs: userData.user.friendIDs,
-                          announcementIDs: userData.user.announcementIDs,
-                          accountPoints: userData.user.accountPoints,
-                          team1Id:
-                            type === "tour1" ? result : userData.user.team1Id,
-                          team2Id:
-                            type === "tour2" ? result : userData.user.team2Id,
-                          tournament1Id: userData.user.tournament1Id,
-                          tournament2Id: userData.user.tournament2Id,
-                          matchIDs: userData.user.matchIDs,
+                    Axios.post(
+                      "http://localhost:8080/global/action/createTeam",
+                      {
+                        id: result,
+                        userId: userData.user.id,
+                        playerIdList: lockedInPlayers,
+                        power: myTeamRP,
+                        totalPoints: 0,
+                        tourId: tourInfoId,
+                      },
+                      {
+                        params: {
+                          userId: userData.user.id,
+                          tournamentId: tourInfoId,
                         },
-                        {
-                          headers: {
-                            Authorization: "Bearer " + userData.token,
-                          },
-                        }
-                      )
-                        .then((res) => {
-                          console.log(res.data.username);
-                          setUserData({
-                            token: userData.token,
-                            user: res.data,
-                          });
-
-                          Axios.put(
-                            "http://localhost:8080/tournaments/" + tourInfoId,
-                            {
-                              headers: {
-                                Authorization: "Bearer " + userData.token,
-                              },
-                            }
-                          ).then((res) => {
-                            setTournamentData(res.data);
-                          });
-                        })
-                        .then((err) => {
-                          console.log(err);
+                      },
+                      {
+                        headers: {
+                          Authorization: "Bearer " + userData.token,
+                        },
+                      }
+                    )
+                      .then((res) => {
+                        console.log(res.data);
+                        toast({
+                          title: "Team Saved!",
+                          description: "Team Players Saved!",
+                          status: "success",
+                          duration: 2000,
+                          isClosable: false,
                         });
-
-                      toast({
-                        title: "Team Saved!",
-                        description: "Team Players Saved!",
-                        status: "success",
-                        duration: 2000,
-                        isClosable: false,
+                        setIsLockedIn(true);
+                        setCanLockIn(true);
+                      })
+                      .then((err) => {
+                        console.log(err);
                       });
-                      setIsLockedIn(true);
-                      setCanLockIn(true);
-                    })
-                    .then((err) => {
-                      console.log(err);
+                  } else {
+                    toast({
+                      title: "Cannot Create Team!",
+                      description: "Max Player Count: 5,  Max RP: 400 RP",
+                      status: "error",
+                      duration: 2000,
+                      isClosable: false,
                     });
+                  }
                 }}>
                 Lock In{" "}
                 <Icon

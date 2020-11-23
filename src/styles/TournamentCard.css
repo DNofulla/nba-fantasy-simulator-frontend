@@ -6,6 +6,7 @@
   border-radius: 10px;
   color: black;
   overflow: hidden;
+  
 }
 
 .TournamentCardImage {
@@ -43,13 +44,14 @@
   margin-left: 10%;
   width: 40%;
   float: left;
+  
 }
 
 #TCardHostNameValue {
   margin-top: 10px;
-  margin-left: 2%;
   width: 40%;
   float: left;
+  text-align: center;
 }
 
 #TournamentCardID {

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import NavBar from "../components/NavBar";
-import FriendsDash from "../components/FriendsDash"
+import FriendsDash from "../components/FriendsDash";
 import "../styles/ProfilePage.css";
 import {
   Image,
@@ -19,32 +19,53 @@ import {
   useDisclosure,
 } from "@chakra-ui/core";
 
-import Axios from 'axios';
+import Axios from "axios";
 import { MdBuild } from "react-icons/md";
 import userContext from "../services/userContext";
-
-var updateEmail, updateFirst, updateLast, updateUserName;
-
-async function updateProfile() {
-  const response = await Axios.post(
-    "http://localhost:8080/update/",
-    {
-      username: updateUserName,
-      email: updateEmail,
-      firstName: updateFirst,
-      lastName: updateLast,
-    }
-  );
-}
+import { useHistory } from "react-router";
 
 export default function ProfilePage(props) {
-  const { userData } = useContext(userContext);
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { userData, setUserData } = useContext(userContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const history = useHistory();
+  const [updateFirst, setUpdateFirst] = useState(userData.user.firstName);
+  const [updateLast, setUpdateLast] = useState(userData.user.lastName);
+  const [updateUserName, setUpdateUsername] = useState(userData.user.username);
 
-  updateEmail = userData.user.email;
-  updateFirst = userData.user.firstName;
-  updateLast = userData.user.lastName;
-  updateUserName = userData.user.username;
+  function updateProfile(userData) {
+    Axios.post(
+      "http://localhost:8080/userInfo/update/" + userData.user.id,
+      {
+        username: updateUserName,
+        firstName: updateFirst,
+        lastName: updateLast,
+        team2Id: userData.user.team2Id,
+        tournamentRequestIDs: userData.user.tournamentRequestIDs,
+        friendRequestIDs: userData.user.friendRequestIDs,
+        friendIDs: userData.user.friendIDs,
+        announcementIDs: userData.user.announcementIDs,
+        tournament2Id: userData.user.tournament2Id,
+        team1Id: userData.user.team1Id,
+        accountPoints: userData.user.accountPoints,
+        email: userData.user.email,
+        tournament1Id: userData.user.tournament1Id,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
+      }
+    )
+      .then((res) => {
+        console.log(res);
+        setUserData({
+          token: userData.token,
+          user: res.data,
+        });
+        history.push("/Profile");
+      })
+      .then((err) => console.log(err));
+  }
 
   return (
     <div className="ProfilePage">
@@ -77,9 +98,7 @@ export default function ProfilePage(props) {
                 <h2>Last Name:</h2>
               </div>
               <div className="user-value">
-                <h2>
-                  {userData.user.lastName}
-                </h2>
+                <h2>{userData.user.lastName}</h2>
               </div>
             </div>
             <div className="user-info-row">
@@ -107,30 +126,61 @@ export default function ProfilePage(props) {
                 <ModalOverlay />
                 <ModalContent id="edit-profile">
                   <ModalHeader>Edit Profile</ModalHeader>
-                  <ModalCloseButton backgroundColor="#f44" color="white" border="none" _hover={{backgroundColor: "f44"}}/>
+                  <ModalCloseButton
+                    backgroundColor="#f44"
+                    color="white"
+                    border="none"
+                    _hover={{ backgroundColor: "f44" }}
+                  />
                   <ModalBody>
                     <div className="edit-profile">
                       <h3>Edit username</h3>
-                      <input type="text" placeholder={userData.user.username} onChange={(e) => {updateUserName = e.target.value;}}/>
+                      <input
+                        type="text"
+                        placeholder={userData.user.username}
+                        value={updateUserName}
+                        onChange={(e) => setUpdateUsername(e.target.value)}
+                      />
                     </div>
                     <div className="edit-profile">
                       <h3>Edit First Name</h3>
-                      <input type="text" placeholder={userData.user.firstName} onChange={(e) => {updateFirst = e.target.value;}}/>
+                      <input
+                        type="text"
+                        placeholder={userData.user.firstName}
+                        value={updateFirst}
+                        onChange={(e) => setUpdateFirst(e.target.value)}
+                      />
                     </div>
                     <div className="edit-profile">
                       <h3>Edit Last Name</h3>
-                      <input type="text" placeholder={userData.user.lastName} onChange={(e) => {updateLast = e.target.value;}}/>
+                      <input
+                        type="text"
+                        placeholder={userData.user.lastName}
+                        value={updateLast}
+                        onChange={(e) => setUpdateLast(e.target.value)}
+                      />
                     </div>
-                    <div className="edit-profile">
+                    {/* <div className="edit-profile">
                       <h3>Edit email</h3>
-                      <input type="text" placeholder={userData.user.email} onChange={(e) => {updateEmail = e.target.value;}}/>
-                    </div>
+                      <input type="text" onChange={(e) => {updateEmail = e.target.value;}}/>
+                    </div> */}
                   </ModalBody>
                   <ModalFooter>
-                    <Button mr={3} onClick={updateProfile} backgroundColor="#82c0cc" border="none">
+                    <Button
+                      mr={3}
+                      onClick={(e) => {
+                        updateProfile(userData);
+                        onClose();
+                      }}
+                      backgroundColor="#82c0cc"
+                      border="none">
                       Accept Changes
                     </Button>
-                    <Button mr={3} onClick={onClose} backgroundColor="#ffa62b" border="none">
+                    <Button
+                      mr={3}
+                      onClick={onClose}
+                      backgroundColor="#ffa62b"
+                      border="none">
                       Cancel
                     </Button>
                   </ModalFooter>

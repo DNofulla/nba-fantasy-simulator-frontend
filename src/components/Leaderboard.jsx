@@ -1,122 +1,52 @@
+import Axios from "axios";
 import React from "react";
+import { useContext } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import userContext from "../services/userContext";
 import "../styles/Leaderboard.css";
 
-const mockTeams = [
-  {
-    TeamName: "Team 1",
-    Points: 86,
-    Position: 1,
-  },
-  {
-    TeamName: "Team 2",
-    Points: 77,
-    Position: 2,
-  },
-  {
-    TeamName: "Team 3",
-    Points: 74,
-    Position: 3,
-  },
-  {
-    TeamName: "Team 4",
-    Points: 54,
-    Position: 4,
-  },
-  {
-    TeamName: "Team 5",
-    Points: 47,
-    Position: 5,
-  },
-  {
-    TeamName: "Team 6",
-    Points: 43,
-    Position: 6,
-  },
-  {
-    TeamName: "Team 7",
-    Points: 42,
-    Position: 7,
-  },
-  {
-    TeamName: "Team 8",
-    Points: 31,
-    Position: 8,
-  },
-  {
-    TeamName: "Team 9",
-    Points: 24,
-    Position: 9,
-  },
-  {
-    TeamName: "Team 10",
-    Points: 21,
-    Position: 10,
-  },
-  {
-    TeamName: "Team 11",
-    Points: 18,
-    Position: 11,
-  },
-  {
-    TeamName: "Team 12",
-    Points: 14,
-    Position: 12,
-  },
-  {
-    TeamName: "Team 13",
-    Points: 13,
-    Position: 13,
-  },
-  {
-    TeamName: "Team 14",
-    Points: 12,
-    Position: 14,
-  },
-  {
-    TeamName: "Team 15",
-    Points: 11,
-    Position: 15,
-  },
-  {
-    TeamName: "Team 16",
-    Points: 10,
-    Position: 16,
-  },
-  {
-    TeamName: "Team 17",
-    Points: 9,
-    Position: 17,
-  },
-];
+export default function Leaderboard({ tourid, type, superType }) {
+  const [users, setUsers] = useState([]);
+  const { userData, setUserData } = useContext(userContext);
+  useEffect(() => {
+    if (type === "Global") {
+      Axios.get("http://localhost:8080/userInfo", {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
+      }).then((res) => {
+        console.log(res.data);
+        setUsers(res.data);
+      });
+    } else {
+      Axios.get(
+        "http://localhost:8080/global/action/getUsersByTournamentId/" + tourid,
+        {
+          headers: {
+            Authorization: "Bearer " + userData.token,
+          },
+        }
+      )
+        .then((res) => {
+          console.log(res.data);
 
-function generateLeaderboard() {
-  let tableRows = [];
-  tableRows.push(
-    <tr className="LeaderboardRow">
-      <th id="PositionTag" className="LeaderboardColumn">
-        #
-      </th>
-      <th id="TeamNameTag" className="LeaderboardColumn">
-        Team Name
-      </th>
-      <th id="PointsTag" className="LeaderboardColumn">
-        Pts
-      </th>
-    </tr>
-  );
-  for (let i = 0; i < mockTeams.length; i++) {
-    tableRows.push(
-      <tr className="LeaderboardRow">
-        <th className="LeaderboardColumn">{mockTeams[i].Position}</th>
-        <th className="LeaderboardColumn">{mockTeams[i].TeamName}</th>
-        <th className="LeaderboardColumn">{mockTeams[i].Points}</th>
-      </tr>
-    );
-  }
-  return tableRows;
-}
+          for (let i = 0; i < res.data.length; i++) {
+            const val = {
+              accountPoint: res.data[i].teamId.totalPoints,
+              username: res.data[i].user.username,
+            };
+            setUsers([...users, val]);
+          }
+          console.log("LEADERBOARD VALUES");
+          console.log(users);
+        })
+        .then((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
 
-export default function Leaderboard({ type, superType }) {
   return (
     <div style={{ color: "black" }} className="Leaderboard">
       <h1
@@ -127,13 +57,40 @@ export default function Leaderboard({ type, superType }) {
           paddingBottom: "5px",
           color: "#ede7e3",
           background: "#16697a",
-          borderRadius: "25px 25px 0 0"
+          borderRadius: "25px 25px 0 0",
         }}>
         {superType} Leaderboard
       </h1>
       <div className="innerLeaderboard">
         <table style={{ color: "white" }} className="LeaderboardTable">
-          {generateLeaderboard()}
+          <tr className="LeaderboardRow">
+            <th id="PositionTag" className="LeaderboardColumn">
+              #
+            </th>
+            <th id="TeamNameTag" className="LeaderboardColumn">
+              {type === "Global" ? "Users" : "Teams"}
+            </th>
+            <th id="PointsTag" className="LeaderboardColumn">
+              Pts
+            </th>
+          </tr>
+          {users.length === 0 ? (
+            <tr className="LeaderboardRow">
+              <th className="LeaderboardColumn">X</th>
+              <th className="LeaderboardColumn">
+                {type === "Global" ? "NO USER" : "NO TEAM"}
+              </th>
+              <th className="LeaderboardColumn">X</th>
+            </tr>
+          ) : (
+            users.map((data, index) => (
+              <tr className="LeaderboardRow">
+                <th className="LeaderboardColumn">{index + 1}</th>
+                <th className="LeaderboardColumn">{data.username}</th>
+                <th className="LeaderboardColumn">{data.accountPoint}</th>
+              </tr>
+            ))
+          )}
         </table>
       </div>
     </div>
