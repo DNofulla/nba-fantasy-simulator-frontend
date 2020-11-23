@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import NavBar from "../components/NavBar"
+import NavBar from "../components/NavBar";
 import "../styles/TournamentDetails.css";
 import { Tab, TabList, TabPanels, Tabs, TabPanel } from "@chakra-ui/core";
 import TournamentCard from "../components/TournamentCard";
@@ -9,87 +9,86 @@ import TeamSelection from "../components/TeamSelection";
 import MatchHistory from "../components/MatchHistory";
 import Axios from "axios";
 import userContext from "../services/userContext";
+import friendListContext from "../services/friendListContext";
+import friendRequestContext from "../services/friendRequestContext";
+import teamContext from "../services/teamContext";
+import tournamentContext from "../services/tournamentContext";
+import tournamentRequestContext from "../services/tournamentRequestContext";
 
 export default function TournamentDetails(props) {
   const [myTeamRP, setMyTeamRP] = useState(0);
-  const { userData, setUserData } = useContext(userContext);
-  const [tournamentData, setTournamentData] = useState({});
-  const [teamData, setTeamData] = useState({});
   const [matchesRemaining, setMatchesRemaining] = useState([]);
   const [allMatchData, setAllMatchData] = useState([]);
   const [matchesPlayed, setMatchesPlayed] = useState([]);
   const [type, setTypeValue] = useState();
 
-  useEffect(() => {
-    const id = userData.user.id;
+  const { userData, setUserData } = useContext(userContext);
+  const { friendData, setFriendData } = useContext(friendListContext);
+  const { friendRequestData, setFriendRequestData } = useContext(
+    friendRequestContext
+  );
+  const { teamData, setTeamData } = useContext(teamContext);
+  const { tournamentData, setTournamentData } = useContext(tournamentContext);
+  const { tournamentRequestData, setTournamentRequestData } = useContext(
+    tournamentRequestContext
+  );
 
-    Axios.get("http://localhost:8080/userInfo/byId/" + id, {
+  const [team1Data, setTeam1Data] = useState();
+  const [team2Data, setTeam2Data] = useState();
+  const [tournament1Data, setTournament1Data] = useState();
+  const [tournament2Data, setTournament2Data] = useState();
+  const [currTournamentData, setCurrTournamentData] = useState({});
+  const [currTeamData, setCurrTeamData] = useState({});
+
+  useEffect(() => {
+    Axios.get("http://localhost:8080/global/action/getUpdatedInfo", {
+      params: {
+        userId: userData.user.id,
+      },
       headers: {
         Authorization: "Bearer " + userData.token,
       },
-    }).then((res) => {
-      setUserData({
-        token: userData.token,
-        user: res.data,
+    })
+      .then((response) => {
+        console.log(response.data);
+        setUserData({
+          token: userData.token,
+          user: response.data.user,
+        });
+        setFriendData(response.data.friendListUserData);
+        setFriendRequestData(response.data.friendRequestUserData);
+        setTeamData([response.data.team1, response.data.team2]);
+        setTournamentData([
+          response.data.tournament1,
+          response.data.tournament2,
+        ]);
+        setTournamentRequestData(response.data.tournamentRequestData);
+        setTeam1Data(response.data.team1);
+        setTeam2Data(response.data.team2);
+        setTournament1Data(response.data.tournament1);
+        setTournament2Data(response.data.tournament2);
+      })
+      .then((error) => {
+        console.log(error);
       });
 
-      if (props.tourIdProp !== "none" && props.tourIdProp !== null) {
-        Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
-          params: {
-            tournamentId: props.tourIdProp,
-          },
-          headers: {
-            Authorization: "Bearer " + userData.token,
-          },
+    if (props.tourIdProp !== "none") {
+      Axios.get("http://localhost:8080/tournaments/getTournamentDataById", {
+        headers: {
+          Authorization: "Bearer " + userData.token,
+        },
+        params: {
+          tournamentId: props.tourIdProp,
+        },
+      })
+        .then((res) => {
+          setCurrTournamentData(res.data);
+          console.log(res);
         })
-          .then((res) => {
-            console.log(res);
-            setTournamentData(res.data);
-          })
-          .then((err) => {
-            console.log(err);
-          });
-
-        Axios.get("http://localhost:8080/team", {
-          headers: {
-            Authorization: "Bearer " + userData.token,
-          },
-        })
-          .then((res) => {
-            console.log(res.data);
-            setTeamData(res.data);
-          })
-          .then((err) => {
-            console.log(err);
-          });
-
-        Axios.get(
-          "http://localhost:8080/match/tournament/" + props.tourIdProp,
-          {
-            headers: {
-              Authorization: "Bearer " + userData.token,
-            },
-          }
-        )
-          .then((response) => {
-            console.log(response);
-            if (response.data.length === 0) {
-              setMatchesPlayed([]);
-              setMatchesRemaining([]);
-            } else {
-              for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].isPlayed) {
-                  setMatchesPlayed([...matchesPlayed, response.data[i]]);
-                } else {
-                  setMatchesRemaining([...matchesRemaining, response.data[i]]);
-                }
-                setAllMatchData([...allMatchData, response.data[i]]);
-              }
-            }
-          })
-          .then((error) => {});
-      }
-    });
+        .then((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
@@ -119,7 +118,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: "10px 0 0 0",
-                    fontSize: ".9em"
+                    fontSize: ".9em",
                   }}>
                   My Team
                 </Tab>
@@ -133,7 +132,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: 0,
-                    fontSize: ".9em"
+                    fontSize: ".9em",
                   }}>
                   Past and Upcoming Matches
                 </Tab>
@@ -147,7 +146,7 @@ export default function TournamentDetails(props) {
                     boxShadow: "none",
                     outline: "none",
                     borderRadius: "0 10px 0 0",
-                    fontSize: ".9em"
+                    fontSize: ".9em",
                   }}>
                   Chat and Leaderboard
                 </Tab>
@@ -166,8 +165,8 @@ export default function TournamentDetails(props) {
                 </TabPanel>
                 <TabPanel>
                   <div id="TourDetailsPanel2">
-                    <MatchHistory type="Match History" bgColor="" />
-                    <MatchHistory type="Upcoming Matches" bgColor="#ffa62b" />
+                    <MatchHistory tourid={props.tourIdProp} type="Match History" bgColor="" />
+                    <MatchHistory tourid={props.tourIdProp} type="Upcoming Matches" bgColor="#ffa62b" />
                   </div>
                 </TabPanel>
                 <TabPanel>
@@ -179,7 +178,7 @@ export default function TournamentDetails(props) {
                       />
                     </div>
                     <div id="tour-lb">
-                      <Leaderboard />
+                      <Leaderboard tourid={props.tourIdProp} />
                     </div>
                   </div>
                 </TabPanel>

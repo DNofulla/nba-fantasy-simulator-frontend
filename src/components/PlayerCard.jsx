@@ -15,6 +15,8 @@ export default function PlayerCard({
   st,
   onChange,
   type,
+  setActivePlayers,
+  activePlayers,
 }) {
   const [isChecked, setIsChecked] = useState(false);
   const [average2Pointers, setAverage2Pointers] = useState(0);
@@ -96,35 +98,25 @@ export default function PlayerCard({
             variantColor="yellow"
             defaultIsunChecked
             onChange={() => {
-              let val = 0;
-              if (rankingPoints > 100) {
-                val = 100;
-              } else {
-                val = rankingPoints;
-              }
-
-              console.log("ID1");
-              console.log(id);
               setIsChecked(!isChecked);
-              const PlayerDataChecked = {
-                id: id,
-                name: name,
-                rp: -val,
-                count: 1,
-              };
-              console.log(PlayerDataChecked.id);
-
-              const PlayerDataUnChecked = {
-                id: id,
-                name: name,
-                rp: val,
-                count: -1,
-              };
-              console.log(val);
-              if (isChecked) {
-                onChange(PlayerDataChecked);
+              if (isChecked === true) {
+                //setActivePlayers([...activePlayers, setActivePlayers]);
+                onChange({
+                  id: id,
+                  name: name,
+                  rp: rankingPoints,
+                  type: "INCREASE",
+                });
               } else {
-                onChange(PlayerDataUnChecked);
+                //const index = activePlayers.indexOf(id);
+                //activePlayers.splice(index, 1);
+                setActivePlayers(activePlayers);
+                onChange({
+                  id: id,
+                  name: name,
+                  rp: rankingPoints,
+                  type: "DECREASE",
+                });
               }
             }}>
             Select Player

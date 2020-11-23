@@ -329,7 +329,11 @@ export default function TournamentCard({ type, tourid, condition, myTeamRP }) {
                 : "Invite Only"}
             </div>
             <div id="TournamentCardLocked">Locked In Status:</div>
-            <div id="TCardLockedValue">{`${currTournamentData.lockedInStatus}`}</div>
+            <div id="TCardLockedValue">
+              {currTournamentData.lockedInStatus === true
+                ? "Locked"
+                : "Unlocked"}
+            </div>
             <div id="TCardHostName">Host: </div>
             <div id="TCardHostNameValue">{currTournamentData.hostUsername}</div>
             <div id="TournamentCardID">Tournament ID:</div>

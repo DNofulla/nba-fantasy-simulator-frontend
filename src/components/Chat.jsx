@@ -37,6 +37,13 @@ export default function Chat(props) {
       user: userData.user.username,
       message: message,
     };
+
+    const tourPayload = {
+      user: userData.user.username,
+      message: message,
+      tournamentID: props.tournamentID,
+    };
+
     if (message !== "") {
       if (props.recipient) {
         payload.sender = userData.user.username;
@@ -44,8 +51,7 @@ export default function Chat(props) {
         socket.emit("send dm", payload);
         setMessage("");
       } else if (props.tournamentID) {
-        payload.tournamentID = props.tournamentID;
-        socket.emit("send tour", payload);
+        socket.emit("send tour", tourPayload);
         setMessage("");
       } else {
         socket.emit("send", payload);
@@ -63,12 +69,19 @@ export default function Chat(props) {
         <h1 id="chatName">{props.chatName}</h1>
       </div>
       <div className={icd} style={{ color: "black" }}>
-        {chatMessages.map((data, index) => (
-          <div className="messageBoxWrapper" key={index}>
-            <div className="usernameChatDivMessage">{data.user}</div>
-            <div className="chatMessageText">{data.text}</div>
-          </div>
-        ))}
+        {chatClass === "friendChat"
+          ? chatMessages.map((data, index) => (
+              <div className="messageBoxWrapper" key={index}>
+                <div className="usernameChatDivMessage">{data.sender}</div>
+                <div className="chatMessageText">{data.text}</div>
+              </div>
+            ))
+          : chatMessages.map((data, index) => (
+              <div className="messageBoxWrapper" key={index}>
+                <div className="usernameChatDivMessage">{data.user}</div>
+                <div className="chatMessageText">{data.text}</div>
+              </div>
+            ))}
       </div>
       <FormControl id="formControlInput" display="flex">
         <Input
