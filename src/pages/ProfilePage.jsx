@@ -23,7 +23,7 @@ import Axios from 'axios';
 import { MdBuild } from "react-icons/md";
 import userContext from "../services/userContext";
 
-var updateEmail, updateFirst, updateLast, updateUserName
+var updateEmail, updateFirst, updateLast, updateUserName;
 
 async function updateProfile() {
   const response = await Axios.post(
@@ -40,6 +40,11 @@ async function updateProfile() {
 export default function ProfilePage(props) {
   const { userData } = useContext(userContext);
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  updateEmail = userData.user.email;
+  updateFirst = userData.user.firstName;
+  updateLast = userData.user.lastName;
+  updateUserName = userData.user.username;
 
   return (
     <div className="ProfilePage">
