@@ -102,7 +102,7 @@ export default function JoinTournament() {
               <Button
                 type="submit"
                 onClick={(e) => {
-                  JoinTournament(e, indexValue);
+                  JoinTournament(indexValue);
                 }}>
                 Join This Tournament
               </Button>
